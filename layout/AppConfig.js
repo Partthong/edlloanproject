@@ -11,9 +11,6 @@ const AppConfig = (props) => {
     const [scales] = useState([12, 13, 14, 15, 16]);
     const { layoutConfig, setLayoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
 
-    const onConfigButtonClick = () => {
-        setLayoutState((prevState) => ({ ...prevState, configSidebarVisible: true }));
-    };
 
     const onConfigSidebarHide = () => {
         setLayoutState((prevState) => ({ ...prevState, configSidebarVisible: false }));
@@ -56,9 +53,7 @@ const AppConfig = (props) => {
 
     return (
         <>
-            <button className="layout-config-button p-link" type="button" onClick={onConfigButtonClick}>
-                <i className="pi pi-cog"></i>
-            </button>
+         
 
             <Sidebar visible={layoutState.configSidebarVisible} onHide={onConfigSidebarHide} position="right" className="layout-config-sidebar w-20rem">
                 {!props.simple && (
