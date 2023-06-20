@@ -19,7 +19,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import axiosInterceptorInstance from '../../../demo/components/axios';
 
-function loan() {
+function Loan() {
     let emptyLoan = {
         loan_no: '',
         name: '',
@@ -432,4 +432,4 @@ function loan() {
     );
 }
 
-export default loan;
+export default Loan;
