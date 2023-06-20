@@ -6,7 +6,8 @@
     top: 0;
     width: 100%;
     padding: 0 2rem;
-    background-color: var(--surface-card);
+    background-color: var(--indigo-500);
+    // background-color: var(--surface-card);
     transition: left $transitionDuration;
     display: flex;
     align-items: center;
@@ -15,7 +16,7 @@
     .layout-topbar-logo {
         display: flex;
         align-items: center;
-        color: var(--surface-900);
+        color: var(--surface-100);
         font-size: 1.5rem;
         font-weight: 500;
         width: 300px;

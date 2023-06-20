@@ -9,106 +9,103 @@ const AppMenu = () => {
 
     const model = [
         {
-            label: 'Home',
-            items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
+            label: 'ໜ້າຫຼັກ',
+            items: [{ label: 'ພາບລວມລະບົບ', icon: 'pi pi-fw pi-home', to: '/' }]
         },
         {
-            label: 'UI Components',
+            label: 'ຂໍ້ມູນໜີ້ກູ້ຢືມ',
             items: [
-                { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
-                { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
-                { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', to: '/uikit/floatlabel' },
-                { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', to: '/uikit/invalidstate' },
-                { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
-                { label: 'Table', icon: 'pi pi-fw pi-table', to: '/uikit/table' },
-                { label: 'List', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
-                { label: 'Tree', icon: 'pi pi-fw pi-share-alt', to: '/uikit/tree' },
-                { label: 'Panel', icon: 'pi pi-fw pi-tablet', to: '/uikit/panel' },
-                { label: 'Overlay', icon: 'pi pi-fw pi-clone', to: '/uikit/overlay' },
-                { label: 'Media', icon: 'pi pi-fw pi-image', to: '/uikit/media' },
-                { label: 'Menu', icon: 'pi pi-fw pi-bars', to: '/uikit/menu', preventExact: true },
-                { label: 'Message', icon: 'pi pi-fw pi-comment', to: '/uikit/message' },
-                { label: 'File', icon: 'pi pi-fw pi-file', to: '/uikit/file' },
-                { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', to: '/uikit/charts' },
-                { label: 'Misc', icon: 'pi pi-fw pi-circle', to: '/uikit/misc' }
-            ]
-        },
-        {
-            label: 'Prime Blocks',
-            items: [
-                { label: 'Free Blocks', icon: 'pi pi-fw pi-eye', to: '/blocks', badge: 'NEW' },
-                { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: 'https://blocks.primereact.org', target: '_blank' }
-            ]
-        },
-        {
-            label: 'Utilities',
-            items: [
-                { label: 'PrimeIcons', icon: 'pi pi-fw pi-prime', to: '/utilities/icons' },
-                { label: 'PrimeFlex', icon: 'pi pi-fw pi-desktop', url: 'https://www.primefaces.org/primeflex/', target: '_blank' }
-            ]
-        },
-        {
-            label: 'Pages',
-            icon: 'pi pi-fw pi-briefcase',
-            to: '/pages',
-            items: [
+                {label: 'ໜີ້ກູ້ຢືມ', icon: 'pi pi-fw pi-database',to: '/pages/loan' },
                 {
-                    label: 'Landing',
-                    icon: 'pi pi-fw pi-globe',
-                    to: '/landing'
-                },
-                {
-                    label: 'Auth',
-                    icon: 'pi pi-fw pi-user',
+                    label: 'ສະແດງຍອດໜີ້',
+                    icon: 'pi pi-fw pi-credit-card',
                     items: [
                         {
-                            label: 'ເຂົ້າລະບົບ',
-                            icon: 'pi pi-fw pi-sign-in',
-                            to: '/auth/login'
+                            label: 'ໜີ້ກູ້ຢືມໂດຍກົງ',
+                            icon: 'pi pi-fw pi-dollar',
+                            to: '/pages/debtdirect'
                         },
                         {
-                            label: 'Error',
-                            icon: 'pi pi-fw pi-times-circle',
-                            to: '/auth/error'
-                        },
-                        {
-                            label: 'Access Denied',
-                            icon: 'pi pi-fw pi-lock',
-                            to: '/auth/access'
+                            label: 'ໜີ້ກູ້ຢືມຕໍ່',
+                            icon: 'pi pi-fw pi-dollar',
+                            to: '/pages/debtbank'
                         }
                     ]
-                },
-                {
-                    label: 'ຂໍ້ມູນທະນາຄານ',
-                    icon: 'pi pi-fw pi-pencil',
-                    to: '/pages/crud'
-                },
-                {
-                    label: 'Timeline',
-                    icon: 'pi pi-fw pi-calendar',
-                    to: '/pages/timeline'
-                },
-                {
-                    label: 'Not Found',
-                    icon: 'pi pi-fw pi-exclamation-circle',
-                    to: '/pages/notfound'
-                },
-                {
-                    label: 'Empty',
-                    icon: 'pi pi-fw pi-circle-off',
-                    to: '/pages/empty'
                 }
             ]
         },
         {
-            label: 'Hierarchy',
+            label: 'ຖອນເງິນກູ້',
+            items: [
+
+                { label: 'ເພີ່ມ Invoice ຖອນເງິນກູ້', icon: 'pi pi-fw pi-file', to: '/pages/invoicewithdraw' },
+                { label: 'ຖອນເງິນກູ້', icon: 'pi pi-fw pi-dollar', to: '/pages/withdraw' },
+                { label: 'ການເຄື່ອນໄຫວຖອນເງິນກູ້', icon: 'pi pi-fw pi-history', to: '' },
+
+
+            ]
+        },
+        {
+            label: 'ຊຳລະໜີ້',
+            items: [
+                { label: 'ເພີ່ມ Invoice ຊຳລະໜີ້', icon: 'pi pi-fw pi-file', to: '/pages/invoice' },
+                { label: 'ຊຳລະໜີ້', icon: 'pi pi-fw pi-dollar', to: '/pages/payment' },
+                { label: 'ການເຄື່ອນໄຫວຊຳລະໜີ້', icon: 'pi pi-fw pi-history', to: '/pages/statement' },
+                // { label: 'ຮ່າງເອກະສານຂໍຈ່າຍ', icon: 'pi pi-fw pi-pencil', to: '' },
+                // { label: 'ອະນຸມັດ', icon: 'pi pi-fw pi-check-circle', to: '/uikit/list' },
+                // { label: 'ຕິດຕາມເອກະສານ', icon: 'pi pi-fw pi-sliders-h', to: '/uikit/menu', preventExact: true }
+            ]
+        },
+
+        {
+            label: 'ຂໍ້ມູນ',
             items: [
                 {
-                    label: 'Submenu 1',
+                    label: 'ຂໍ້ມູນຜູ້ໃຊ້',
+                    icon: 'pi pi-fw pi-user',
+                    items: [
+                        {
+                            label: 'ຂໍ້ມູນຜູ້ໃຊ້',
+                            icon: 'pi pi-fw pi-user-plus',
+                            to: '/auth/login'
+                        },
+                        {
+                            label: 'ລົງທະບຽນ',
+                            icon: 'pi pi-fw pi-id-card',
+                            to: '/auth/login'
+                        }
+
+                    ]
+                },
+
+                {
+                    label: 'ຂໍ້ມູນທະນາຄານ',
+
+                    icon: 'pi pi-fw pi-building',
+                    to: '/pages/bank'
+                },
+                {
+                    label: 'ຂໍ້ມູນປະເພດກູ້ຢືມ',
+                    icon: 'pi pi-fw pi-list',
+                    to: '/pages/loantype'
+                }
+
+                // {
+                //     label: 'Empty',
+                //     icon: 'pi pi-fw pi-circle-off',
+                //     to: '/pages/empty'
+                // }
+            ]
+        },
+        {
+            label: 'ລາຍງານ',
+            items: [
+                {
+                    label: 'ລາຍງານຕ່າງໆ',
                     icon: 'pi pi-fw pi-bookmark',
                     items: [
                         {
-                            label: 'Submenu 1.1',
+                            label: 'ລາຍງານເງິນກູ້',
                             icon: 'pi pi-fw pi-bookmark',
                             items: [
                                 { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-bookmark' },
@@ -117,49 +114,15 @@ const AppMenu = () => {
                             ]
                         },
                         {
-                            label: 'Submenu 1.2',
+                            label: 'ລາຍງານການຊຳລະໜີ້',
                             icon: 'pi pi-fw pi-bookmark',
                             items: [{ label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                        }
-                    ]
-                },
-                {
-                    label: 'Submenu 2',
-                    icon: 'pi pi-fw pi-bookmark',
-                    items: [
-                        {
-                            label: 'Submenu 2.1',
-                            icon: 'pi pi-fw pi-bookmark',
-                            items: [
-                                { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' }
-                            ]
-                        },
-                        {
-                            label: 'Submenu 2.2',
-                            icon: 'pi pi-fw pi-bookmark',
-                            items: [{ label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' }]
                         }
                     ]
                 }
             ]
         },
-        {
-            label: 'Get Started',
-            items: [
-                {
-                    label: 'Documentation',
-                    icon: 'pi pi-fw pi-question',
-                    to: '/documentation'
-                },
-                {
-                    label: 'View Source',
-                    icon: 'pi pi-fw pi-search',
-                    url: 'https://github.com/primefaces/sakai-react',
-                    target: '_blank'
-                }
-            ]
-        }
+        {}
     ];
 
     return (
@@ -169,9 +132,6 @@ const AppMenu = () => {
                     return !item.seperator ? <AppMenuitem item={item} root={true} index={i} key={item.label} /> : <li className="menu-separator"></li>;
                 })}
 
-                <Link href="https://blocks.primereact.org" target="_blank" style={{ cursor: 'pointer' }}>
-                    <img alt="Prime Blocks" className="w-full mt-3" src={`/layout/images/banner-primeblocks${layoutConfig.colorScheme === 'light' ? '' : '-dark'}.png`} />
-                </Link>
             </ul>
         </MenuProvider>
     );
