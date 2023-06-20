@@ -136,11 +136,7 @@ const Layout = (props) => {
           href={`/layout/images/edl.png`}
           type="image/x-icon"
         ></link>
-        <meta
-          name="description"
-          content="The ultimate collection of design-agnostic, flexible and accessible React UI Components."
-        />
-        <meta name="robots" content="index, follow" />
+
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
 
