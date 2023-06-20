@@ -49,9 +49,9 @@ function Bank() {
         } catch (error) {
             console.error(error);
             toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'Authorization has been denied' });
-            // localStorage.removeItem('token');
-            // localStorage.removeItem('userName');
-            // router.push('/auth/login');
+            localStorage.removeItem('token');
+            localStorage.removeItem('userName');
+            router.push('/auth/login');
 
         }
     };

@@ -62,7 +62,7 @@ const AppMenu = () => {
                     icon: 'pi pi-fw pi-user',
                     items: [
                         {
-                            label: 'Login',
+                            label: 'ເຂົ້າລະບົບ',
                             icon: 'pi pi-fw pi-sign-in',
                             to: '/auth/login'
                         },
@@ -79,7 +79,7 @@ const AppMenu = () => {
                     ]
                 },
                 {
-                    label: 'Crud',
+                    label: 'ຂໍ້ມູນທະນາຄານ',
                     icon: 'pi pi-fw pi-pencil',
                     to: '/pages/crud'
                 },
