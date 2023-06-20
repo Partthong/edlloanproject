@@ -52,7 +52,7 @@
 }
 
 .p-component {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 'Noto Sans Lao', sans-serif; 
   font-size: 1rem;
   font-weight: normal;
 }
@@ -80,7 +80,7 @@
 
 .p-link {
   font-size: 1rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 'Noto Sans Lao', sans-serif; 
   border-radius: 3px;
 }
 .p-link:focus {
@@ -259,7 +259,7 @@
   padding: 0.2145rem 0;
 }
 .p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-input-token input {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 'Noto Sans Lao', sans-serif; 
   font-size: 1rem;
   color: #dedede;
   padding: 0;
@@ -705,7 +705,7 @@
   padding: 0.2145rem 0;
 }
 .p-chips .p-chips-multiple-container .p-chips-input-token input {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 'Noto Sans Lao', sans-serif; 
   font-size: 1rem;
   color: #dedede;
   padding: 0;
@@ -1070,7 +1070,7 @@
 }
 
 .p-inputtext {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 'Noto Sans Lao', sans-serif; 
   font-size: 1rem;
   color: #dedede;
   background: #191919;
@@ -5988,7 +5988,7 @@
 }
 .p-terminal .p-terminal-input {
   font-size: 1rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 'Noto Sans Lao', sans-serif; 
 }
 
 .p-badge {
