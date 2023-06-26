@@ -9,7 +9,6 @@ import { classNames } from 'primereact/utils';
 import axiosInterceptorInstance from '../../../demo/components/axios';
 import { Toast } from 'primereact/toast';
 
-
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

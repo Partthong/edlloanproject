@@ -13,6 +13,10 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import axiosInterceptorInstance from '../../../demo/components/axios';
 
+
+import { Calendar } from 'primereact/calendar';
+
+
 function LoanType() {
     let emptyLoantype = {
         lt_id: '',
@@ -26,6 +30,7 @@ function LoanType() {
     const [editBankDialog, setEditBankDialog] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const router = useRouter();
+
 
 
     useEffect(() => {
@@ -157,6 +162,8 @@ function LoanType() {
 
                     <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
                     <div>
+                 
+
                         <DataTable
                             dataKey="lt_id"
                             value={loantypeList}

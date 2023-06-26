@@ -198,9 +198,6 @@ function Payments() {
             setCheckcapital(payment.amount_capital);
             setRateCapital(payment.amount_capital * payment.rate);
 
-
-
-
         } else {
             setCheckcapital(0);
             setRateCapital(0);
@@ -419,8 +416,6 @@ function Payments() {
                                 {isCheckchange && (
                                     <div className="p-2 text-center">
                                         <InputText className="text-red-500" id="name" placeholder="ກະລຸນາໃສ່ເຫດຜົນ" />
-
-
                                     </div>
                                 )}
 

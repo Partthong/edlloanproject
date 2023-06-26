@@ -18,7 +18,6 @@ function Bank() {
         b_id: '',
         bankName: '',
         atm: '',
-
     };
     const [bankList, setBankList] = useState([]);
     const [bank, setBank] = useState(emptyBank);

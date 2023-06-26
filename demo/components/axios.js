@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const axiosInterceptorInstance = axios.create({
-  baseURL: "https://localhost:44344",// Replace with your API base URL
+  baseURL: "http://192.168.20.87",// Replace with your API base URL
 });
+
 
 
 // Request interceptor
