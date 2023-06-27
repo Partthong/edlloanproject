@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const axiosInterceptorInstance = axios.create({
+let axiosInterceptorInstance = axios.create({
   baseURL: "http://192.168.20.87",// Replace with your API base URL
 });
 
