@@ -6,7 +6,7 @@ import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "../styles/layout/layout.scss";
 import "../styles/demo/Demos.scss";
-import HttpsRedirect from "react-https-redirect";
+
 
 export default function MyApp({ Component, pageProps }) {
   if (Component.getLayout) {
@@ -18,11 +18,11 @@ export default function MyApp({ Component, pageProps }) {
   } else {
     return (
       <LayoutProvider>
-        <HttpsRedirect>
+     
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </HttpsRedirect>
+       
       </LayoutProvider>
     );
   }
