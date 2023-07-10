@@ -2,10 +2,11 @@
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-
+import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
 
 import React, { useEffect, useRef, useState } from 'react';
+import axiosInterceptorInstance from '../../../demo/components/axios';
 
 function WithdrawData() {
 
@@ -18,16 +19,29 @@ function WithdrawData() {
     const [submitted, setSubmitted] = useState(false);
 
 
-
     useEffect(() => {
-        var requestOptions = {
-            method: 'GET'
-        };
-        fetch('https://localhost:44363/api/withdraw/GetListWithdraw', requestOptions)
-            .then((response) => response.json())
-            .then((result) => setWithdrawList(result))
-            .catch((error) => console.log('error', error));
+        showWithdrawList();
     }, []);
+
+    const showWithdrawList = async () => {
+        try {
+
+            const response = await axiosInterceptorInstance.get('/api/withdraw/GetListWithdraw');
+            console.log("token ==>", response)
+            if (response.status === 200 || response.status === 201) {
+                setWithdrawList(response.data);
+            }
+
+        } catch (error) {
+            console.error(error);
+            toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'Authorization has been denied' });
+            localStorage.removeItem('token');
+            localStorage.removeItem('userName');
+            router.push('/auth/login');
+
+        }
+    };
+
 
     const toast = useRef(null);
     const dt = useRef(null);
@@ -70,8 +84,8 @@ function WithdrawData() {
     const actionBodyTemplate = (rowData) => {
         return (
             <>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editBank(rowData)} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeleteBank(rowData)} />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2"  />
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-danger"  />
             </>
         );
     };
@@ -95,7 +109,7 @@ function WithdrawData() {
         <div className="grid crud-demo">
             <div className="col-12">
                 <div className="card">
-
+                <Toast ref={toast} />
                     <div>
                         <DataTable
                             dataKey="w_id"

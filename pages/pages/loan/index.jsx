@@ -145,7 +145,7 @@ function Loan() {
 
     const InsertData = async () => {
         try {
-            if (insertloan.loan_no.trim()) {
+            if (insertloan.loan_no.trim() && insertloan.project.trim() && insertloan.amount_loan.trim() && insertloan.c_id.trim()) {
 
             var raw = {
                 loan_no: insertloan.loan_no,
@@ -262,7 +262,7 @@ function Loan() {
     const actionBodyTemplate = (rowData) => {
         return (
             <>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editBank(rowData)} />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2"  />
 
 
             </>
@@ -296,7 +296,7 @@ function Loan() {
         return (
             <React.Fragment>
                 <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="ພິມ" className="mr-2 inline-block" />
-                <Button label="ຟາຍ Excel" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />
+                <Button label="ຟາຍ Excel" icon="pi pi-upload" className="p-button-help" />
             </React.Fragment>
         );
     };

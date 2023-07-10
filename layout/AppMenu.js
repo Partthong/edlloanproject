@@ -15,7 +15,7 @@ const AppMenu = () => {
         {
             label: 'ຂໍ້ມູນໜີ້ກູ້ຢືມ',
             items: [
-                {label: 'ໜີ້ກູ້ຢືມ', icon: 'pi pi-fw pi-database',to: '/pages/loan' },
+                {label: 'ຈັດການໜີ້ກູ້ຢືມ', icon: 'pi pi-fw pi-database',to: '/pages/loan' },
                 {
                     label: 'ສະແດງຍອດໜີ້',
                     icon: 'pi pi-fw pi-credit-card',

@@ -19,6 +19,7 @@ function Invoice() {
     l_id: "",
     amount_capital: "",
     amount_interest: "",
+    interest: "",
     libor: "",
     amount_other: "",
     remarks: "",
@@ -27,6 +28,12 @@ function Invoice() {
     date_in: "",
     create_date: "",
     creator: "admin",
+
+    credit: "",
+    period_days: "",
+    days: "",
+    start_date: "",
+    end_date: "",
   };
 
   const [insertInvoice, setInsertInvoice] = useState(emptyInvoice);
@@ -38,7 +45,9 @@ function Invoice() {
   const router = useRouter();
   const [startdate, setStartdate] = useState();
   const [enddate, setEnddate] = useState();
-  const [sumdate, setSumdate] = useState(0);
+  const [sumday, setSumday] = useState(0);
+  const [paymentcapital, setPaymentcapital] = useState(0);
+  const [paymentinterest, setPaymentinterest] = useState(0);
 
   useEffect(() => {
     showLoanList();
@@ -67,13 +76,41 @@ function Invoice() {
   };
 
   const InsertData = async () => {
-    try {
-      if (insertInvoice.invoice_no.trim()) {
+    if (!selectedLoan.l_id) {
+      toast.current.show({
+        severity: "error",
+        summary: "ຜິດພາດ",
+        detail: "ກະລຸນາປ້ອນເລກທີສັນຍາ",
+      });
+    } else if (insertInvoice.invoice_no === "") {
+      toast.current.show({
+        severity: "error",
+        summary: "ຜິດພາດ",
+        detail: "ກະລຸນາປ້ອນເລກທີໃບ Invoice",
+      });
+    } else if (
+      insertInvoice.atm_name === "" ||
+      insertInvoice.atm_number === ""
+    ) {
+      toast.current.show({
+        severity: "error",
+        summary: "ຜິດພາດ",
+        detail: "ກະລຸນາປ້ອນຊື່ບັນຊີ ຫຼື ເລກ ATM",
+      });
+    } else if (paymentcapital === 0) {
+      toast.current.show({
+        severity: "error",
+        summary: "ຜິດພາດ",
+        detail: "ກະລຸນາປ້ອນ ວັນທີເລີ່ມ ຫຼື ວັນທີສິ້ນສຸດ",
+      });
+    } else {
+      try {
         var raw = {
           invoice_no: insertInvoice.invoice_no,
           l_id: selectedLoan.l_id,
-          amount_capital: insertInvoice.amount_capital,
-          amount_interest: insertInvoice.amount_interest,
+          // amount_capital: paymentcapital,
+          amount_capital: paymentcapital.amount_capital,
+          amount_interest: paymentinterest.amount_interest,
           libor: insertInvoice.libor,
           amount_other: insertInvoice.amount_other,
           remarks: insertInvoice.remarks,
@@ -82,7 +119,16 @@ function Invoice() {
           date_in: moment(insertInvoice.date_in).format("YYYY-MM-DD"),
           create_date: moment().format("YYYY-MM-DD"),
           creator: "admin",
+          credit: insertInvoice.credit,
+          period_days: insertInvoice.period_days,
+          days: sumday,
+          // days:insertInvoice.days,
+
+          start_date: moment(startdate).format("YYYY-MM-DD"),
+          end_date: moment(enddate).format("YYYY-MM-DD"),
         };
+
+        // console.log(raw);
 
         const response = await axiosInterceptorInstance.post(
           "/api/invoice/InsertInvoice",
@@ -96,38 +142,61 @@ function Invoice() {
             detail: "ບັນທຶກຂໍ້ມູນສຳເລັດ",
             life: 3000,
           });
+
           setInsertInvoice(emptyInvoice);
 
           setTimeout(() => {
             document.location.reload();
           }, 2000);
         }
-      } else {
+      } catch (error) {
+        console.error(error);
         toast.current.show({
           severity: "error",
-          summary: "Unsuccessful",
-          detail: "ທ່ານປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ",
-          life: 3000,
+          summary: "ຜິດພາດ",
+          detail: "Authorization has been denied",
         });
+        router.push("/auth/login");
       }
-    } catch (error) {
-      console.error(error);
-      toast.current.show({
-        severity: "error",
-        summary: "ຜິດພາດ",
-        detail: "Authorization has been denied",
-      });
-      router.push("/auth/login");
     }
   };
 
-  const countdays = () => {
+  const onCalculate = () => {
+     if (!startdate || !enddate){
+      toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນວັນທີເລີ່ມ ຫຼື ວັນທີສິ້ນສຸດ' });
+     }  else if(insertInvoice.period_days === '' || insertInvoice.period_days === 0){
+      toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນຈຳນວນງວດທີ່ຊຳລະ' });
+    }else if(insertInvoice.libor === '' || insertInvoice.libor === 0){
+      toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນອັດຕາ SOFR' });
+    }else if(insertInvoice.credit === '' || insertInvoice.credit === 0){
+      toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນອັດຕາ credit ສ່ວນຕ່າງ' });
+    }else if(!selectedLoan.l_id ){
+      toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນເລກທີສັນຍາ' });
+    } else{
     const todate = new Date(enddate); // the later date
     const fromdate = new Date(startdate); // the earlier date
-    const result = differenceInDays(todate, fromdate);
-    setSumdate(result);
-    // console.log(result)
-  };
+    const amountday = differenceInDays(todate, fromdate);
+
+    var sumcapital = selectedLoan.total_withdraw / insertInvoice.period_days;
+    var suminsterest =
+      (selectedLoan.total_balance * amountday) / 360 +
+      (selectedLoan.interest * insertInvoice.libor + insertInvoice.credit);
+    var suminsterestFix = suminsterest.toFixed(0);
+
+    setSumday(amountday);
+    setPaymentcapital({...paymentcapital, amount_capital: sumcapital});
+    setPaymentinterest({...paymentinterest, amount_interest: suminsterestFix});
+
+    // setInsertInvoice({...insertInvoice, amount_capital: sumcapital})
+    // setInsertInvoice({...insertInvoice, amount_interest: suminsterestFix})
+
+    // console.log(insertInvoice)
+  }
+
+   };
+  
+
+
 
   const onUpload = () => {
     toast.current.show({
@@ -145,7 +214,6 @@ function Invoice() {
     const val = e.value || 0;
     let _invoice = { ...insertInvoice };
     _invoice[`${name}`] = val;
-
     setInsertInvoice(_invoice);
   };
 
@@ -211,7 +279,7 @@ function Invoice() {
                 onChange={(e) => setSelectedLoan(e.value)}
               />
             </div>
-            <div className="field col-12 md:col-6">
+            <div className="field col-12 md:col-4">
               <label htmlFor="lastname2" className="">
                 ຊື່ໂຄງການ
               </label>
@@ -223,7 +291,20 @@ function Invoice() {
               />
             </div>
 
-            <div className="field col-12 md:col-6">
+            <div className="field col-12 md:col-4">
+              <label htmlFor="firstname2" className="">
+                ຈຳນວນໜີ້ກູ້ຢືມທັງໝົດ
+              </label>
+              <InputNumber
+                className=""
+                readOnly
+                id="firstname2"
+                type="text"
+                value={selectedLoan ? selectedLoan.total_withdraw : ""}
+              />
+            </div>
+
+            <div className="field col-12 md:col-4">
               <label htmlFor="firstname2" className="text-red-600">
                 ຈຳນວນໜີ້ກູ້ຢືມຍັງເຫຼືອທັງໝົດ
               </label>
@@ -253,11 +334,13 @@ function Invoice() {
       <div className="col-12 md:col-6 ">
         <div className="card p-fluid p-3">
           <div className="field col">
-            <label htmlFor="name1">ເລກທີໃບ Invoice</label>
+            <label htmlFor="name1" className="text-blue-600">
+              ເລກທີໃບ Invoice
+            </label>
             <InputText
               id="invoice_no"
               type="text"
-              className="text-blue-500"
+              className="text-blue-600"
               onChange={(e) =>
                 setInsertInvoice({
                   ...insertInvoice,
@@ -267,7 +350,9 @@ function Invoice() {
             />
           </div>
           <div className="field col">
-            <label htmlFor="email1">ຊື່ບັນຊີ</label>
+            <label htmlFor="email1" className="text-blue-600">
+              ຊື່ບັນຊີ
+            </label>
             <InputText
               id="atm_name"
               type="text"
@@ -278,7 +363,9 @@ function Invoice() {
             />
           </div>
           <div className="field col">
-            <label htmlFor="email1">ເລກບັນຊີ</label>
+            <label htmlFor="email1" className="text-blue-600">
+              ເລກບັນຊີ
+            </label>
             <InputText
               id="atm_number"
               type="text"
@@ -292,7 +379,9 @@ function Invoice() {
             />
           </div>
           <div className="field col">
-            <label htmlFor="age1">ວັນທີຕ້ອງຊຳລະກ່ອນ</label>
+            <label htmlFor="age1" className="text-blue-600">
+              ວັນທີຕ້ອງຊຳລະກ່ອນ
+            </label>
 
             <Calendar
               dateFormat="yy-mm-dd"
@@ -321,25 +410,21 @@ function Invoice() {
 
       <div className="col-12 md:col-6">
         <div className="card p-fluid p-3 ">
-          <div className="field col">
-            <label htmlFor="name1">ຈຳນວນເງິນຕົ້ນທຶນ</label>
-            <InputNumber
-              value={insertInvoice.amount_capital}
-              onValueChange={(e) => onInputNumberChange(e, "amount_capital")}
-            />
-          </div>
-
           <div className="p-fluid formgrid grid p-2 ">
-          <div className="field col-6">
-              <label htmlFor="price">ວັນທີກູ້ຢືມ</label>
+            <div className="field col">
+              <label htmlFor="price" className="text-blue-600">
+                ວັນທີເລີ່ມ
+              </label>
               <Calendar
                 dateFormat="yy-mm-dd"
                 onChange={(e) => setStartdate(e.target.value)}
                 showIcon
               />
             </div>
-            <div className="field col-6">
-              <label htmlFor="quantity">ວັນກຳນົດກູ້ຢືມ</label>
+            <div className="field col">
+              <label htmlFor="quantity" className="text-blue-600">
+                ວັນທີສຸດທ້າຍ
+              </label>
               <Calendar
                 dateFormat="yy-mm-dd"
                 onChange={(e) => setEnddate(e.target.value)}
@@ -348,68 +433,140 @@ function Invoice() {
             </div>
           </div>
           <div className="p-fluid formgrid grid p-2 ">
-          <div className="field col">
-            <label htmlFor="age2">ຈຳນວນວັນ</label>
-            <InputNumber value={sumdate} />
+            <div className="field col">
+              <label htmlFor="age2">ຈຳນວນມື້</label>
+              <InputNumber
+                value={sumday}
+                //  onValueChange={(e) => onInputNumberChange(e, "days")}
+                onValueChange={(e) =>
+                  setInsertInvoice({ ...insertInvoice, days: e.value })
+                }
+                readOnly
+              />
+            </div>
+
+            <div className="field col">
+              <label htmlFor="email2" className="text-blue-600">
+                ຈຳນວນງວດທີ່ຊຳລະ
+              </label>
+              <InputNumber
+                value={insertInvoice.period_days}
+                onValueChange={(e) => onInputNumberChange(e, "period_days")}
+              />
+            </div>
           </div>
 
-          <div className="field col">
-            <label htmlFor="email2">ຈຳນວນເງິນດອກເບ້ຍ</label>
-            <InputNumber
-              value={insertInvoice.amount_interest}
-              onValueChange={(e) => onInputNumberChange(e, "amount_interest")}
+          <div className="p-fluid formgrid grid p-2 ">
+            <div className="field col">
+              <label htmlFor="age2">ອັດຕາດອກເບ້ຍ (ຕາມສັນຍາ)</label>
+              <InputNumber
+                value={selectedLoan ? selectedLoan.interest : ""}
+                readOnly
+                onValueChange={(e) => onInputNumberChange(e, "interest")}
+                mode="decimal"
+                minFractionDigits={3}
+                prefix="%"
+              />
+            </div>
+
+            <div className="field col">
+              <label htmlFor="age2" className="text-blue-600">
+                ອັດຕາ SOFR
+              </label>
+              <InputNumber
+                value={insertInvoice.libor}
+                onValueChange={(e) => onInputNumberChange(e, "libor")}
+                mode="decimal"
+                minFractionDigits={3}
+                prefix="%"
+              />
+            </div>
+
+            <div className="field col">
+              <label htmlFor="age2" className="text-blue-600">
+                Credit ສ່ວນຕ່າງ
+              </label>
+              <InputNumber
+                value={insertInvoice.credit}
+                onValueChange={(e) => onInputNumberChange(e, "credit")}
+                mode="decimal"
+                minFractionDigits={3}
+                prefix="%"
+              />
+            </div>
+          </div>
+
+          <div className="p-fluid formgrid grid p-2 ">
+            <div className="field col">
+              <label htmlFor="name1">ຈຳນວນຊຳລະເງິນຕົ້ນທຶນ</label>
+              <InputNumber
+                className="bg-red-500"
+                value={paymentcapital.amount_capital}
+                // onValueChange={(e) => onInputNumberChange(e, "amount_capital")}
+                onValueChange={(e) =>
+                  setPaymentcapital({
+                    ...paymentcapital,
+                    amount_capital: e.value,
+                  })
+                }
+              />
+            </div>
+
+            <div className="field col">
+              <label htmlFor="email2">ຈຳນວນຊຳລະເງິນດອກເບ້ຍ</label>
+              <InputNumber
+                className="bg-red-500"
+                value={paymentinterest.amount_interest}
+                // onValueChange={(e) => onInputNumberChange(e, "amount_interest")}
+                onValueChange={(e) =>
+                  setPaymentinterest({
+                    ...paymentinterest,
+                    amount_interest: e.value,
+                  })
+                }
+                mode="decimal"
+                minFractionDigits={0}
+              />
+            </div>
+          </div>
+          <div className="p-fluid formgrid  ">
+            <div className="field col-12">
+              <label htmlFor="age2" className="text-blue-600">
+                ຈຳນວນເງິນອື່ນໆ
+              </label>
+              <InputNumber
+                value={insertInvoice.amount_other}
+                onValueChange={(e) => onInputNumberChange(e, "amount_other")}
+              />
+            </div>
+            <div className="field col-12">
+              <label htmlFor="age2" className="text-red-500">
+                ໝາຍເຫດ
+              </label>
+
+              <InputText
+                id="remarks"
+                type="text"
+                className="text-blue-500"
+                onChange={(e) =>
+                  setInsertInvoice({
+                    ...insertInvoice,
+                    remarks: e.target.value,
+                  })
+                }
+                placeholder="ເຫດຜົນ"
+              />
+            </div>
+          </div>
+
+          <div className="field mt-3">
+            <Button
+              label="ຄິດໄລ່"
+              icon="pi pi-pencil"
+              className="p-button-danger"
+              onClick={onCalculate}
             />
           </div>
-          </div>
-       
-
-          <div className="field col">
-            <label htmlFor="age2">ອັດຕາ Libor</label>
-            <InputNumber
-              value={insertInvoice.libor}
-              onValueChange={(e) => onInputNumberChange(e, "libor")}
-              mode="decimal"
-              minFractionDigits={2}
-              prefix="%"
-            />
-          </div>
-
-          <div className="field col">
-            <label htmlFor="age2">ຈຳນວນເງິນອື່ນໆ</label>
-            <InputNumber
-              value={insertInvoice.amount_other}
-              onValueChange={(e) => onInputNumberChange(e, "amount_other")}
-            />
-          </div>
-
-          <div className="field col">
-            <label htmlFor="age2" className="text-red-500">
-              ໝາຍເຫດ
-            </label>
-
-            <InputText
-              id="remarks"
-              type="text"
-              className="text-blue-500"
-              onChange={(e) =>
-                setInsertInvoice({ ...insertInvoice, remarks: e.target.value })
-              }
-              placeholder="ເຫດຜົນ"
-            />
-          </div>
-
-   
-          <div className="field col">
-          <Button
-            label="ຄິດໄລ່"
-            icon="pi pi-pencil"
-            className="p-button-secondary"
-            onClick={countdays}
-          />
-          </div>
-
-  
-        
         </div>
       </div>
     </div>

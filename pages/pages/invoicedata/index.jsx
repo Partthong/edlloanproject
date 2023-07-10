@@ -94,14 +94,14 @@ function Invoicedata() {
     const editBankDialogFooter = (
         <>
             <Button label="ປິດອອກ" icon="pi pi-times" className="p-button-text " onClick={hideEditBankDialog} />
-            <Button label="ບັນທຶກ" icon="pi pi-check" className="p-button-info " onClick={''} />
+            <Button label="ບັນທຶກ" icon="pi pi-check" className="p-button-info "  />
         </>
     );
 
     const deleteBankDialogFooter = (
         <>
             <Button label="ປະຕິເສດ" icon="pi pi-times" className="p-button-text" onClick={hideDeleteBankDialog} />
-            <Button label="ຢືນຢັນ" icon="pi pi-check" className="p-button-danger" onClick={''} />
+            <Button label="ຢືນຢັນ" icon="pi pi-check" className="p-button-danger"  />
         </>
     );
 
@@ -109,7 +109,7 @@ function Invoicedata() {
         return (
             <>
 
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editBank(rowData)} />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2"  />
                 <Button icon="pi pi-user-edit" className="p-button-rounded p-button-warning mr-2" onClick={() => confirmDeleteBank(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeleteBank(rowData)} />
             </>

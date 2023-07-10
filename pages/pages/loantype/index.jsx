@@ -95,14 +95,14 @@ function LoanType() {
         <>
 
             <Button label="ປິດອອກ" icon="pi pi-times" className="p-button-text " onClick={hideDialog}  />
-            <Button label="ບັນທຶກ" icon="pi pi-check" className="p-button-info " onClick={''} />
+            <Button label="ບັນທຶກ" icon="pi pi-check" className="p-button-info "  />
         </>
     );
 
     const editBankDialogFooter = (
         <>
             <Button label="ປິດອອກ" icon="pi pi-times" className="p-button-text " onClick={hideEditBankDialog} />
-            <Button label="ບັນທຶກ" icon="pi pi-check" className="p-button-info " onClick={''} />
+            <Button label="ບັນທຶກ" icon="pi pi-check" className="p-button-info" />
         </>
     );
 
@@ -116,8 +116,8 @@ function LoanType() {
     const actionBodyTemplate = (rowData) => {
         return (
             <>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editBank(rowData)} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteBank(rowData)} />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editBank()} />
+                {/* <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteBank()} /> */}
             </>
         );
     };
@@ -149,7 +149,7 @@ function LoanType() {
         return (
             <React.Fragment>
                 <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="ພິມ" className="mr-2 inline-block" />
-                <Button label="ຟາຍ Excel" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />
+                <Button label="ຟາຍ Excel" icon="pi pi-upload" className="p-button-help" />
             </React.Fragment>
         );
     };

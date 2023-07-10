@@ -6,10 +6,12 @@ import { Dialog } from 'primereact/dialog';
 
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-
+import { useRouter } from 'next/router';
 import { Calendar } from 'primereact/calendar';
 import React, { useEffect, useRef, useState } from 'react';
 import { Toast } from 'primereact/toast';
+import axiosInterceptorInstance from '../../../demo/components/axios';
+import moment from 'moment';
 
 
 function Withdraw() {
@@ -34,73 +36,103 @@ function Withdraw() {
     const [selectedCategories, setSelectedCategories] = useState(0);
     const [result, setResult] = useState(0);
     const [startDate, setStartDate] = useState(new Date());
+    const router = useRouter();
 
-    const InsertData = () => {
-        var myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-
-        var raw = JSON.stringify({
-            l_id: withdraw.l_id,
-            inw_id: withdraw.inw_id,
-            amount_withdraw: withdraw.invamount_withdraw,
-            invamount_withdraw: (withdraw.invamount_withdraw - withdraw.invamount_withdraw),
-            // withdraw_date: insertwistthdraw.withdraw_date,
-            withdraw_date: withdraw.date_inv,
-            creator: 'admin',
-            total_withdraw: (withdraw.total_withdraw + withdraw.invamount_withdraw),
-            total_balance: (withdraw.total_withdraw + withdraw.invamount_withdraw)
-
-        });
-
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw
-        };
-        fetch('https://localhost:44363/api/withdraw/InsertWithdraw', requestOptions)
-        .then((response) => response.json())
-        .then((result) => setInsertwithdraw(result))
-        .catch((error) => console.log('error', error));
-
-        fetch('https://localhost:44363/api/loan/UpdateAmountWithdraw', requestOptions)
-        .then((response) => response.json())
-        .then((result) => setInsertwithdraw(result))
-        .catch((error) => console.log('error', error));
-
-        fetch('https://localhost:44363/api/invoicewithdraw/UpdateInvAmountWithdraw', requestOptions)
-        .then((response) => response.json())
-        .then((result) => setInsertwithdraw(result))
-        .catch((error) => console.log('error', error));
-
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'ບັນທຶກຂໍ້ມູນສຳເລັດ', life: 3000 });
-
-        setWithdraw(emptyWithdraw );
-        setTimeout(() => {
-            document.location.reload();
-        }, 2000);
-    };
 
     useEffect(() => {
-        var requestOptions = {
-            method: 'GET'
-        };
-        fetch('https://localhost:44363/api/invoicewithdraw/GetListInvoiceWithdraw', requestOptions)
-            .then((response) => response.json())
-            .then((result) => setWithdrawList(result))
-            .catch((error) => console.log('error', error));
+        showInvoiceWithdraw();
     }, []);
+
+    const showInvoiceWithdraw = async () => {
+        try {
+
+            const response = await axiosInterceptorInstance.get('/api/invoicewithdraw/GetListInvoiceWithdraw');
+            console.log("token ==>", response)
+            if (response.status === 200 || response.status === 201) {
+                setWithdrawList(response.data);
+            }
+
+        } catch (error) {
+            console.error(error);
+            toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'Authorization has been denied' });
+            localStorage.removeItem('token');
+            localStorage.removeItem('userName');
+            router.push('/auth/login');
+
+        }
+    };
+
+    const InsertData = async () => {
+
+    
+          try {
+            var raw = {
+                l_id: withdraw.l_id,
+                inw_id: withdraw.inw_id,
+                amount_withdraw: withdraw.invamount_withdraw,
+                invamount_withdraw: (withdraw.invamount_withdraw - withdraw.invamount_withdraw),
+                withdraw_date: moment(withdraw.date_inv).format("YYYY-MM-DD"),
+
+                creator: 'admin',
+                total_withdraw: (withdraw.total_withdraw + withdraw.invamount_withdraw),
+                total_balance: (withdraw.total_withdraw + withdraw.invamount_withdraw)
+    
+            };
+    
+
+      
+            const response1 = await axiosInterceptorInstance.post(
+              "/api/withdraw/InsertWithdraw",
+              raw
+            );
+            const response2 = await axiosInterceptorInstance.post(
+              "/api/loan/UpdateAmountWithdraw",
+              raw
+            );
+            const response3 = await axiosInterceptorInstance.post(
+              "/api/invoicewithdraw/UpdateInvAmountWithdraw",
+              raw
+            );
+      
+            if (
+              response1.status === 200 &&
+              response2.status === 200 &&
+              response3.status === 200
+            ) {
+            
+                setWithdraw(emptyWithdraw);
+              setTimeout(() => {
+                document.location.reload();
+              }, 3000);
+      
+              toast.current.show({
+                severity: "success",
+                summary: "Successful",
+                detail: "ບັນທຶກຂໍ້ມູນສຳເລັດ",
+                life: 3000,
+              });
+          
+      
+            
+            }
+          } catch (error) {
+            console.error(error);
+            toast.current.show({
+              severity: "error",
+              summary: "ຜິດພາດ",
+              detail: "Authorization has been denied",
+            });
+            router.push("/auth/login");
+          }
+        
+     
+      };
+
+
 
     const toast = useRef(null);
     const dt = useRef(null);
 
-
-
-        const handleCalculation = () => {
-
-        setResult(payment.amount_interest - checkinterest);
-
-
-    };
 
     const withdraws = (withdraw) => {
         setWithdraw({ ...withdraw });
@@ -125,41 +157,8 @@ function Withdraw() {
         setDeleteBankDialog(true);
     };
 
-    const checkpaymentCapital = (e) => {
-        if (e.target.checked) {
-            setCheckcapital(withdraw.amount_capital);
-        }
-        else {
-            setCheckcapital(0);
-        }
 
-    };
 
-    const checkpaymentInterest = (e) => {
-        if (e.target.checked) {
-            setCheckinterest(withdraw.amount_interest);
-        }
-        else {
-            setCheckinterest(0);
-        }
-
-    };
-
-    const checkpaymentLibor = (e) => {
-        if (e.target.checked) {
-            setChecklibor(withdraw.amount_libor);
-        }
-        else {
-            setChecklibor(0);
-        }
-
-    };
-
-    const handle = (dates) => {
-        console.log("data===>", dates)
-            setStartDate(dates);
-
-        };
 
 
     const paymentDialogFooter = (

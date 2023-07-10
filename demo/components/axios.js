@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const axiosInterceptorInstance = axios.create({
-  baseURL: "https://loantrack.edl.com.la",// Replace with your API base URL
+  baseURL: "https://loantrack.edl.com.la",
+  // baseURL: "https://localhost:44344",
 });
 
 

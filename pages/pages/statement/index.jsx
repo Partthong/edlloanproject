@@ -93,7 +93,7 @@ const Statement = () => {
         return (
             <React.Fragment>
 
-                <Button label="ພິມອອກ" icon="pi pi-print" className="p-button-help" onClick={exportCSV} />
+                <Button label="ພິມອອກ" icon="pi pi-print" className="p-button-help" />
             </React.Fragment>
         );
     };
