@@ -7,9 +7,7 @@ import { FileUpload } from 'primereact/fileupload';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { RadioButton } from 'primereact/radiobutton';
-
 import { useRouter } from 'next/router';
-
 import { Calendar } from 'primereact/calendar';
 import { Toast } from 'primereact/toast';
 import { Dropdown } from 'primereact/dropdown';
@@ -74,7 +72,7 @@ function Loan() {
             console.log("token ==>", response)
 
             if (response.status === 200 || response.status === 201) {
-                setLoanList(response.data);
+            setLoanList(response.data);
             }
 
         } catch (error) {
@@ -145,7 +143,7 @@ function Loan() {
 
     const InsertData = async () => {
         try {
-            if (insertloan.loan_no.trim() && insertloan.project.trim() && insertloan.amount_loan.trim() && insertloan.c_id.trim()) {
+            if (insertloan.loan_no.trim()) {
 
             var raw = {
                 loan_no: insertloan.loan_no,
@@ -196,8 +194,8 @@ function Loan() {
 
     const openNew = () => {
         setInsertLoan(emptyLoan);
-
         setLoanDialog(true);
+        
     };
 
     const editBank = (bank) => {
@@ -234,7 +232,6 @@ function Loan() {
         const val = e.value || 0;
         let _loan = { ...insertloan };
         _loan[`${name}`] = val;
-
         setInsertLoan(_loan);
     };
 
