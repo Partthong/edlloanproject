@@ -10,8 +10,6 @@ const AppFooter = () => {
             by
             <span className="font-medium ml-2">EDL Technology Solution</span>
 
-           
-
         </div>
     );
 };

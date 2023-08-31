@@ -30,6 +30,7 @@ function Loan() {
         c_id: '',
         b_id:'',
         interest: '',
+        interest_type: '',
         statuss: '',
         lt_id:'',
         loan_date:'',
@@ -55,6 +56,8 @@ function Loan() {
 
     const [dropdownCurrency, setDropdownCurrency] = useState(null);
     const [dropdownCurrencys, setDropdownCurrencys] = useState(null);
+
+    const [dropdownInteresttype, setDropdownInteresttype] = useState(null);
     const router = useRouter();
 
 
@@ -156,6 +159,7 @@ function Loan() {
 
                 c_id: insertloan.c_id,
                 interest: insertloan.interest,
+                interest_type: dropdownInteresttype,
                 statuss: insertloan.statuss,
                 b_id:insertloan.b_id,
                 lt_id:insertloan.lt_id,
@@ -188,6 +192,12 @@ function Loan() {
         }
 
       };
+
+
+      const interestType = [
+        { name: 'Libor', code: 'Libor' },
+        { name: 'Sofr', code: 'Sofr' },
+    ];
 
     const toast = useRef(null);
     const dt = useRef(null);
@@ -297,6 +307,14 @@ function Loan() {
             </React.Fragment>
         );
     };
+    const formatnumber = (value) => {
+        return value.toLocaleString('en-US', {});
+    };
+
+
+    const totalamount_loan = (rowData) => {
+        return formatnumber(rowData.amount_loan);
+    };
 
     return (
         <div className="grid crud-demo">
@@ -322,10 +340,11 @@ function Loan() {
                             <Column field="l_id" header="ລະຫັດ" sortable headerStyle={{ minWidth: '5rem' }}></Column>
                             <Column field="loan_no" header="ເລກທີສັນຍາ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
                             <Column field="project" header="ຊື່ໂຄງການ" sortable headerStyle={{ minWidth: '15rem' }}></Column>
-                            <Column field="amount_loan" header="ມູນຄ່າກູ້ຢືມ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
+                            <Column field="amount_loan" header="ມູນຄ່າກູ້ຢືມ" dataType="numeric"  sortable headerStyle={{ minWidth: '10rem' }} body={totalamount_loan}></Column>
+
                             <Column field="currency" header="ສະກຸນເງິນ" sortable headerStyle={{ minWidth: '5rem' }}></Column>
                             <Column field="interest" header="ດອກເບ້ຍ" sortable headerStyle={{ minWidth: '5rem' }}></Column>
-
+                            <Column field="interest_type" header="ຮູບແບບດອກເບ້ຍ" sortable headerStyle={{ minWidth: '7rem' }}></Column>
                             <Column field="bankName" header="ທະນາຄານ" sortable headerStyle={{ minWidth: '15rem' }}></Column>
                             <Column field="loan_type" header="ປະເພດກູ້ຢືມ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
                             <Column field="loan_date" header="ວັນທີກູ້ຢືມ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
@@ -347,8 +366,7 @@ function Loan() {
                             <div className="formgrid grid">
                                 <div className="field col">
                                     <label htmlFor="price">ມູນຄ່າກູ້ຢືມ</label>
-
-                                    <InputNumber value={insertloan.amount_loan} onValueChange={(e) => onInputNumberChange(e, 'amount_loan')} />
+                                    <InputNumber value={insertloan.amount_loan} onValueChange={(e) => onInputNumberChange(e, 'amount_loan')} mode="decimal" minFractionDigits={2} />
                                 </div>
 
                                 <div className="field col">
@@ -358,12 +376,18 @@ function Loan() {
 
                                 </div>
                             </div>
-                            <div className="field">
+                            <div className="formgrid grid">
+                            <div className="field col">
                                 <label htmlFor="name">ເລືອກທະນາຄານ</label>
 
                                 <Dropdown  value={insertloan.b_id} onChange={(e) => setInsertLoan({ ...insertloan, b_id: e.target.value })}  options={dropdownBanks} optionValue="b_id" optionLabel="bankName" placeholder="ເລືອກ" />
                             </div>
 
+                            <div className="field col">
+                                    <label htmlFor="name">ເລືອກປະເພດກູ້ຢືມ</label>
+                                    <Dropdown  value={insertloan.lt_id} onChange={(e) => setInsertLoan({ ...insertloan, lt_id: e.target.value })}  options={dropdownLoanTypes} optionValue="lt_id" optionLabel="loan_type" placeholder="ເລືອກ" />
+                                </div>
+                                </div>
                             <div className="formgrid grid">
                                 <div className="field col">
                                     <label htmlFor="price">ດອກເບ້ຍ</label>
@@ -372,10 +396,11 @@ function Loan() {
                                 </div>
 
                                 <div className="field col">
-                                    <label htmlFor="name">ເລືອກປະເພດກູ້ຢືມ</label>
+                                <label htmlFor="price">ຮູບແບບດອກເບ້ຍ</label>
+                                <Dropdown value={dropdownInteresttype} onChange={(e) => setDropdownInteresttype(e.value)} options={interestType} optionValue="code"   optionLabel="name" placeholder="ເລືອກ" />
+                            </div>
 
-                                    <Dropdown  value={insertloan.lt_id} onChange={(e) => setInsertLoan({ ...insertloan, lt_id: e.target.value })}  options={dropdownLoanTypes} optionValue="lt_id" optionLabel="loan_type" placeholder="ເລືອກ" />
-                                </div>
+                        
                             </div>
                             <div className="formgrid grid">
                                 <div className="field col">

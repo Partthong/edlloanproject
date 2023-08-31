@@ -423,6 +423,8 @@ function Payments() {
               ></Column>
               <Column
                 body={actionBodyTemplate}
+                header="ຢັ້ງຢືນການຊຳລະ"
+                sortable
                 headerStyle={{ minWidth: "10rem" }}
               ></Column>
             </DataTable>

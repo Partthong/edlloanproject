@@ -121,7 +121,7 @@ function Invoice() {
           creator: "admin",
           credit: insertInvoice.credit,
           period_days: insertInvoice.period_days,
-          days: sumday,
+          days: sumday.days,
           // days:insertInvoice.days,
 
           start_date: moment(startdate).format("YYYY-MM-DD"),
@@ -162,41 +162,49 @@ function Invoice() {
   };
 
   const onCalculate = () => {
-     if (!startdate || !enddate){
-      toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນວັນທີເລີ່ມ ຫຼື ວັນທີສິ້ນສຸດ' });
-     }  else if(insertInvoice.period_days === '' || insertInvoice.period_days === 0){
-      toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນຈຳນວນງວດທີ່ຊຳລະ' });
-    }else if(insertInvoice.libor === '' || insertInvoice.libor === 0){
-      toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນອັດຕາ SOFR' });
-    }else if(insertInvoice.credit === '' || insertInvoice.credit === 0){
-      toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນອັດຕາ credit ສ່ວນຕ່າງ' });
-    }else if(!selectedLoan.l_id ){
-      toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນເລກທີສັນຍາ' });
-    } else{
-    const todate = new Date(enddate); // the later date
-    const fromdate = new Date(startdate); // the earlier date
-    const amountday = differenceInDays(todate, fromdate);
+    if (!startdate || !enddate) {
+      toast.current.show({
+        severity: "error",
+        summary: "ຜິດພາດ",
+        detail: "ກະລຸນາປ້ອນວັນທີເລີ່ມ ຫຼື ວັນທີສິ້ນສຸດ",
+      });
+    } else if (
+      insertInvoice.period_days === "" ||
+      insertInvoice.period_days === 0
+    ) {
+      toast.current.show({
+        severity: "error",
+        summary: "ຜິດພາດ",
+        detail: "ກະລຸນາປ້ອນຈຳນວນງວດທີ່ຊຳລະ",
+      });
+    } else if (!selectedLoan.l_id) {
+      toast.current.show({
+        severity: "error",
+        summary: "ຜິດພາດ",
+        detail: "ກະລຸນາປ້ອນເລກທີສັນຍາ",
+      });
+    } else {
+      const todate = new Date(enddate); // the later date
+      const fromdate = new Date(startdate); // the earlier date
+      const amountday = differenceInDays(todate, fromdate);
 
-    var sumcapital = selectedLoan.total_withdraw / insertInvoice.period_days;
-    var suminsterest =
-      (selectedLoan.total_balance * amountday) / 360 +
-      (selectedLoan.interest * insertInvoice.libor + insertInvoice.credit);
-    var suminsterestFix = suminsterest.toFixed(0);
+      var sumdays = amountday;
+      var sumcapital = selectedLoan.total_withdraw / insertInvoice.period_days;
+      var suminsterest = (selectedLoan.total_balance * sumdays) / 360 + (selectedLoan.interest * insertInvoice.libor + insertInvoice.credit);
+      var suminsterestFix = suminsterest.toFixed(0);
+   
 
-    setSumday(amountday);
-    setPaymentcapital({...paymentcapital, amount_capital: sumcapital});
-    setPaymentinterest({...paymentinterest, amount_interest: suminsterestFix});
+      // setSumday(amountday);
+      setSumday({ ...sumday, days: sumdays });
+      setPaymentcapital({ ...paymentcapital, amount_capital: sumcapital });
+      setPaymentinterest({...paymentinterest, amount_interest: suminsterestFix });
 
-    // setInsertInvoice({...insertInvoice, amount_capital: sumcapital})
-    // setInsertInvoice({...insertInvoice, amount_interest: suminsterestFix})
+      // setInsertInvoice({...insertInvoice, amount_capital: sumcapital})
+      // setInsertInvoice({...insertInvoice, amount_interest: suminsterestFix})
 
-    // console.log(insertInvoice)
-  }
-
-   };
-  
-
-
+      // console.log(insertInvoice)
+    }
+  };
 
   const onUpload = () => {
     toast.current.show({
@@ -351,7 +359,7 @@ function Invoice() {
           </div>
           <div className="field col">
             <label htmlFor="email1" className="text-blue-600">
-              ຊື່ບັນຊີ
+              ຊື່ບັນຊີປາຍທາງ
             </label>
             <InputText
               id="atm_name"
@@ -364,7 +372,7 @@ function Invoice() {
           </div>
           <div className="field col">
             <label htmlFor="email1" className="text-blue-600">
-              ເລກບັນຊີ
+              ເລກບັນຊີປາຍທາງ
             </label>
             <InputText
               id="atm_number"
@@ -436,12 +444,10 @@ function Invoice() {
             <div className="field col">
               <label htmlFor="age2">ຈຳນວນມື້</label>
               <InputNumber
-                value={sumday}
-                //  onValueChange={(e) => onInputNumberChange(e, "days")}
-                onValueChange={(e) =>
-                  setInsertInvoice({ ...insertInvoice, days: e.value })
-                }
-                readOnly
+               value={sumday.days} onValueChange={(e) => setSumday({ ...sumday, days: e.value }) }
+              //  value={paymentcapital.amount_capital} onValueChange={(e) => setPaymentcapital({...paymentcapital, amount_capital: e.value }) }
+
+               
               />
             </div>
 
@@ -501,14 +507,9 @@ function Invoice() {
               <label htmlFor="name1">ຈຳນວນຊຳລະເງິນຕົ້ນທຶນ</label>
               <InputNumber
                 className="bg-red-500"
-                value={paymentcapital.amount_capital}
-                // onValueChange={(e) => onInputNumberChange(e, "amount_capital")}
-                onValueChange={(e) =>
-                  setPaymentcapital({
-                    ...paymentcapital,
-                    amount_capital: e.value,
-                  })
-                }
+                value={paymentcapital.amount_capital} onValueChange={(e) => setPaymentcapital({...paymentcapital, amount_capital: e.value }) }
+                mode="decimal"
+                minFractionDigits={2}
               />
             </div>
 
@@ -516,14 +517,7 @@ function Invoice() {
               <label htmlFor="email2">ຈຳນວນຊຳລະເງິນດອກເບ້ຍ</label>
               <InputNumber
                 className="bg-red-500"
-                value={paymentinterest.amount_interest}
-                // onValueChange={(e) => onInputNumberChange(e, "amount_interest")}
-                onValueChange={(e) =>
-                  setPaymentinterest({
-                    ...paymentinterest,
-                    amount_interest: e.value,
-                  })
-                }
+                value={paymentinterest.amount_interest} onValueChange={(e) =>  setPaymentinterest({...paymentinterest, amount_interest: e.value })  }
                 mode="decimal"
                 minFractionDigits={0}
               />
