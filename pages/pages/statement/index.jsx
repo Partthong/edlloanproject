@@ -110,7 +110,6 @@ const Statement = () => {
                             <div className="font-semibold "> ເລກທີ Invoice: {payment.invoice_no}</div>
                             <div className="flex align-items-center gap-3">
                                 <span className="flex align-items-center gap-2">
-
                                     <span className="font-semibold">{payment.bankName}</span>
                                 </span>
                                 <Tag value={payment.loan_type} severity={getSeverity(payment)}></Tag>
@@ -120,10 +119,10 @@ const Statement = () => {
                             </div>
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                            <span className="text-2xl  text-red-600">
-                                <i className="pi pi-money-bill"></i> {payment.totalpaid}
+                            <span className="text-2xl flex align-items-center gap-2 text-red-600">
+                            {payment.totalpaid.toLocaleString("en-US")}  <Tag className="bg-red-300" value={payment.currency} ></Tag>
                             </span>
-
+                           
                             <Button icon="pi pi-info" className="p-button-rounded p-button-primary" onClick={() => openNew(payment)}></Button>
                         </div>
                     </div>
@@ -167,15 +166,19 @@ const Statement = () => {
                         </div>
                         <div className="field flex justify-content-between">
                             <label htmlFor="name">ຊຳລະຕົ້ນທຶນ</label>
-                            <div className="  text-3xl text-red-600  ">{payment?.capital_paid}</div>
+                            <div className="  text-xl text-red-600  ">{payment?.capital_paid.toLocaleString("en-US")}</div>
                         </div>
                         <div className="field flex justify-content-between">
                             <label htmlFor="name">ຊຳລະດອກເບ້ຍ</label>
-                            <div className=" text-3xl text-red-600  ">{payment?.interest_paid}</div>
+                            <div className=" text-xl text-red-600  ">{payment?.interest_paid.toLocaleString("en-US")}</div>
                         </div>
                         <div className="field flex justify-content-between">
                             <label htmlFor="name">ຊຳລະ Libor</label>
-                            <div className="text-3xl text-red-600  ">{payment?.libor_paid}</div>
+                            <div className="text-xl text-red-600  ">{payment?.libor_paid}</div>
+                        </div>
+                        <div className="field flex justify-content-between">
+                            <label htmlFor="name">ຊຳລະກີບ</label>
+                            <div className="text-xl text-blue-600  ">{payment?.amount_kip.toLocaleString("en-US")}</div>
                         </div>
                     </Dialog>
                 </div>

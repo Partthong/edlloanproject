@@ -72,7 +72,6 @@ function Bank() {
 
                 setBankDialog(false);
                 setBank(emptyBank);
-
                 showBankList();
             }
         }else {
@@ -188,6 +187,17 @@ function Bank() {
         );
     };
 
+    const imageBodyTemplate = (rowData) => {
+        return (
+          <img
+            src={rowData.images}
+            alt=""
+            className="shadow-2 border-round"
+            style={{ width: "35px" }}
+          />
+        );
+      };
+
 
     return (
         <div className="grid crud-demo">
@@ -212,7 +222,20 @@ function Bank() {
                             responsiveLayout="scroll"
                             header={header}
                         >
-                            <Column field="b_id" header="ລະຫັດ" sortable headerStyle={{ minWidth: '15rem' }}></Column>
+                               <Column
+                header="#"
+                headerStyle={{ width: "3rem" }}
+                body={(data, options) => options.rowIndex + 1}
+              ></Column>
+                            {/* <Column field="b_id" header="ລະຫັດ" sortable headerStyle={{ minWidth: '5rem' }}></Column> */}
+                            <Column
+                                field="images"
+                                header="ຮູບ"
+                                body={imageBodyTemplate}
+                                // className="text-blue-600 "
+                                sortable
+                                headerStyle={{ minWidth: "5rem" }}
+                            ></Column>
                             <Column field="bankName" header="ຊື່ທະນາຄານ" sortable headerStyle={{ minWidth: '15rem' }}></Column>
                             <Column field="atm" header="ເລກບັນຊີ" sortable headerStyle={{ minWidth: '15rem' }}></Column>
 

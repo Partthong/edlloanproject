@@ -29,6 +29,11 @@ const AppMenu = () => {
                             label: 'ໜີ້ກູ້ຢືມຕໍ່',
                             icon: 'pi pi-fw pi-dollar',
                             to: '/pages/debtbank'
+                        },
+                        {
+                            label: 'ໜີ້ກູ້ຢືມແກ້ສະພາບຄ່ອງ',
+                            icon: 'pi pi-fw pi-dollar',
+                            to: ''
                         }
                     ]
                 }
@@ -88,13 +93,13 @@ const AppMenu = () => {
                     label: 'ຂໍ້ມູນປະເພດກູ້ຢືມ',
                     icon: 'pi pi-fw pi-list',
                     to: '/pages/loantype'
-                }
+                },
 
-                // {
-                //     label: 'Empty',
-                //     icon: 'pi pi-fw pi-circle-off',
-                //     to: '/pages/empty'
-                // }
+                {
+                    label: 'ອັດຕາແລກປ່ຽນ',
+                    icon: 'pi pi-fw pi-circle-off',
+                    to: '/pages/currency'
+                }
             ]
         },
         {

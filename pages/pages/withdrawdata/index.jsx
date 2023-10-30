@@ -130,8 +130,6 @@ function WithdrawData() {
                             <Column field="project" header="ຊື່ໂຄງການ" sortable headerStyle={{ minWidth: '25rem' }}></Column>
                             <Column field="amount_withdraw" header="ຈຳນວນເງິນຖອນ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
                             <Column field="withdraw_date" header="ວັນທີຖອນ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
-
-
                             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                         </DataTable>
 

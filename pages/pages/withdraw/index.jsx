@@ -100,7 +100,7 @@ function Withdraw() {
               response3.status === 200
             ) {
             
-                setWithdraw(emptyWithdraw);
+            setWithdraw(emptyWithdraw);
               setTimeout(() => {
                 document.location.reload();
               }, 3000);
@@ -222,8 +222,7 @@ function Withdraw() {
                             className="datatable-responsive"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-                            emptyMessage="No products found."
-                           
+                            emptyMessage="No products found."          
                         >
                             <Column field="inw_id" header="ລະຫັດ" sortable headerStyle={{ minWidth: '8rem' }}></Column>
                             <Column field="invoicew_no" header="ລະຫັດ Invoice" sortable headerStyle={{ minWidth: '8rem' }}></Column>

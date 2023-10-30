@@ -6,10 +6,8 @@ const AppFooter = () => {
 
     return (
         <div className="layout-footer">
-            <img src={`/layout/images/ets.png`} alt="Logo" height="25" className="mr-2" />
-            by
-            <span className="font-medium ml-2">EDL Technology Solution</span>
-
+            <img src={`/layout/images/edl.png`} alt="Logo" height="25" className="" />    
+            <span className="font-medium ml-2">by ພະແນກ Application, EDL-ICT 2023</span>
         </div>
     );
 };

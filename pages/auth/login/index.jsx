@@ -27,7 +27,8 @@ const LoginPage = () => {
         else if (password.length < 6) {
             toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາປ້ອນລະຫັດຜ່ານຫຼາຍກ່ວາ 6 ຕົວອັກສອນ' });
         }
-        else {
+        else 
+        {
         try {
             var raw = 'username=' + username + '&password=' + password + '&grant_type=password';
             const res = await axiosInterceptorInstance.post('/Token', raw);
