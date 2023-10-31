@@ -1,24 +1,17 @@
-import { Button } from "primereact/button";
 import { Chart } from "primereact/chart";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { Menu } from "primereact/menu";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { ProductService } from "../demo/service/ProductService";
 import { LayoutContext } from "../layout/context/layoutcontext";
-import Link from "next/link";
-import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { useRouter } from "next/router";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import axiosInterceptorInstance from "../demo/components/axios";
-import { InputNumber } from "primereact/inputnumber";
 
 const Dashboard = () => {
   const [products, setProducts] = useState(null);
-  const menu1 = useRef(null);
-  const menu2 = useRef(null);
   const [lineOptions, setLineOptions] = useState(null);
   const { layoutConfig } = useContext(LayoutContext);
   const [chartData, setChartData] = useState({});

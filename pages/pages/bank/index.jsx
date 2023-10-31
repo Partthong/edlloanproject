@@ -8,10 +8,32 @@ import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
 import { Toolbar } from 'primereact/toolbar';
 import { useRouter } from 'next/router';
-
 import React, { useEffect, useRef, useState } from 'react';
-
 import axiosInterceptorInstance from '../../../demo/components/axios';
+
+import { myFont } from '../../../public/Phetsarath_OT';
+import { EDL_DEPARTMENT, EDL_DIVISION, EDL_FOOTER_CONTACT, EDL_FOOTER_TITLE, EDL_TITLE, LPDR_SUB_TITLE, LPDR_TITLE, NbFormat } from '../../api/actions/constants';
+import { imgData } from '../../../public/image';
+import pdfMake from 'pdfmake/build/pdfmake';
+import moment from 'moment';
+
+pdfMake.vfs = myFont;
+
+pdfMake.fonts = {
+    Roboto: {
+        normal: 'Roboto-Regular.ttf',
+        bold: 'Roboto-Regular.ttf',
+        italics: 'Roboto-Regular.ttf',
+        bolditalics: 'Roboto-Regular.ttf'
+    },
+    Phetsarath: {
+        normal: 'phetsarath_ot.ttf',
+        bold: 'phetsarath_ot.ttf',
+        italics: 'phetsarath_ot.ttf',
+        bolditalics: 'phetsarath_ot.ttf'
+    }
+}
+
 
 function Bank() {
     let emptyBank = {
@@ -85,6 +107,193 @@ function Bank() {
         }
 
       };
+
+        // print pdf with pdfmake
+     const printDocument = () => {
+        const docDefinition = {
+                 pageSize: 'A4',
+                 pageOrientation: 'portrait', // portrait, landscape
+                 pageMargins: [30, 40, 30, 40],
+                 content: [
+                     {
+                         text: LPDR_TITLE,
+                         alignment: 'center',
+                     },
+                     {
+                         text: LPDR_SUB_TITLE,
+                         alignment: 'center'
+                     },
+                     {
+                         image: imgData,
+                         alignment: 'center',
+                         width: 68,
+                         height: 60
+                     },
+                     {
+                         columns: [
+                             {
+                                 text: EDL_TITLE,
+                                 alignment: 'left',
+                                 fontSize: 11,   
+                             },
+                            
+                         ]
+                     },
+                     {
+                         columns: [
+                             {
+                                 text: EDL_DEPARTMENT,
+                                 alignment: 'left',
+                                 fontSize: 11
+                             },                                                        
+                         ]
+                     },
+                     {
+                        columns: [
+                           
+                            {
+                               text: EDL_DIVISION,
+                               alignment: 'left'
+                           },      
+                           {
+                            text: 'ເລກທີ່: ........../ຟຟລ.ຝກໝ.ພສຍ',
+                            alignment: 'right'
+                        },              
+                      
+                        ]
+                    },
+                    {
+                        columns: [
+                      
+                           {
+                            text: 'ນະຄອນຫຼວງວຽງຈັນ, ວັນທີ..................' ,
+                            alignment: 'right'
+                        },
+                
+                        ]
+                    },
+                    
+                     {
+                         text: 'ລາຍງານຂໍ້ມູນທະນາຄານ',
+                         style: 'header',
+                         alignment: 'center'
+                     },
+                     {
+                         stack: [
+                             
+                             {
+                                 table: {
+                                     widths: [20, 260,230],
+                                     body: [
+                                         [
+                                             { text: 'ລ/ດ', style: 'tableHeader', alignment: 'center', border: [true, true, true, true] },
+                                             { text: 'ຊື່ທະນາຄານ', style: 'tableHeader', alignment: 'left', border: [true, true, true, true] },
+                                             { text: 'ເລກບັນຊີ', style: 'tableHeader', alignment: 'left', border: [true, true, true, true] },
+                                         ],
+                                         ...bankList.map((bank, index) => [
+                                             { text: index + 1, style: 'tableHeader', alignment: 'center', border: [true, true, true, true] },
+                                             { text: bank.bankName, style: 'tableHeader', alignment: 'left', border: [true, true, true, true] },
+                                             { text: bank.atm, style: 'tableHeader', alignment: 'left', border: [true, true, true, true] },
+                                         ])
+                                     ]
+                                 },
+                                 headerRows: 1,
+                             },
+                            //  {
+                            //      table: {
+                            //         widths: [20, 260,230],
+                            //          body: [
+                            //              [
+                            //                  { text: 'ຈໍານວນແຜນທັງໝົດ: ', style: 'tableHeader', alignment: 'right', border: [true, false, true, true] },
+                            //                  { text: NbFormat("999999.000"), style: 'tableHeader', alignment: 'right', border: [true, false, true, true] },
+                            //              ],
+                            //          ]
+                            //      },
+                            //  },
+                
+                            
+                         ],
+                     },
+                    //  {
+                    //      text: 'ທີ່: ' + EDL_TITLE + ' ວັນທີ່: ' + moment(new Date()).format("DD/MM/YYYY ເວລາ: hh:mm:ss"),
+                    //      alignment: 'right',
+                    //      margin: [0, 20, 0, 0]
+                    //  },
+                     {
+                         columns: [
+                             {
+                                 text: 'ຫົວໜ້າຝ່າຍ',
+                                 alignment: 'left',
+                                 margin: [10, 20, 20, 10]
+                             },
+                             {
+                                 text: 'ຫົວໜ້າພະແນກ',
+                                 alignment: 'center',
+                                 margin: [10, 20, 20, 10]
+                             },
+                             {
+                                 text: 'ຜູ້ສັງລວມ',
+                                 alignment: 'center',
+                                 style: 'bold',
+                                 margin: [10, 20, 20, 10]
+                             },
+                         ]
+                     },
+ 
+                 ],
+                 styles: {
+                     header: {
+                         fontSize: 18,
+                         bold: true,
+                         margin: [0, 0, 0, 10]
+                     },
+                     tableExample: {
+                         margin: [0, 5, 0, 15]
+                     },
+                     tableHeader: {
+                         bold: true,
+                         fontSize: 12,
+                         color: 'black'
+                     }
+                 },
+                 defaultStyle: {
+                     font: 'Phetsarath',
+                     columnGap: 0,
+                 },
+                 footer: function (currentPage, pageCount) {
+                     return [
+                         {
+                             table: {
+                                 widths: [610, 100],
+                                 body: [
+                                     [
+ 
+                                         { text: EDL_FOOTER_TITLE, style: 'tableHeader', alignment: 'center', fontSize: 10 },
+                                        //  { text: "ໜ້າ: " + currentPage.toString() + ' ໃນ ' + pageCount, alignment: 'right', style: 'normalText', fontSize: 10 },
+                                     ],
+                                 ]
+                             },
+                             layout: 'noBorders'
+                         },
+                         {
+                             table: {
+                                 widths: '*',
+                                 body: [
+                                     [
+                                         { text: EDL_FOOTER_CONTACT, alignment: 'center', fontSize: 10 },
+                                     ],
+                                 ]
+                             },
+                             layout: 'noBorders'
+                         }
+                     ]
+                 },
+             };
+ 
+             const pdfGenerator = pdfMake.createPdf(docDefinition);
+             pdfGenerator.print();
+            //  pdfGenerator.download(`ລາຍງານ ຫົວໜ່ວຍ.pdf`);
+     }
 
 
     const toast = useRef(null);
@@ -173,19 +382,28 @@ function Bank() {
             <React.Fragment>
                 <div className="my-2">
                     <Button label="ເພີ່ມໃໝ່" icon="pi pi-plus" className="p-button-info mr-2" onClick={openNew} />
+                   
                 </div>
             </React.Fragment>
         );
     };
 
+
     const rightToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="ພິມ" className="mr-2 inline-block" />
+               
+                <div className="my-2">
+                {/* <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="ພິມ" className="mr-2 inline-block" /> */}
+                <Button label="PDF" icon="pi pi-file" className="p-button-danger mr-2" onClick={printDocument} />
                 <Button label="ຟາຍ Excel" icon="pi pi-upload" className="p-button-help"  />
+                {/* <Button label="Import file" icon="pi pi-save" className="p-button-success mr-2" onClick={nextPage} /> */}
+                </div>
             </React.Fragment>
         );
     };
+
+
 
     const imageBodyTemplate = (rowData) => {
         return (
