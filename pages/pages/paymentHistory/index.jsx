@@ -2,7 +2,7 @@
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-
+import { Toolbar } from "primereact/toolbar";
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
 
@@ -11,9 +11,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import axiosInterceptorInstance from '../../../demo/components/axios';
 
-function Invoicedata() {
+function PaymentHistory() {
 
-    const [invoiceList, setInvoiceList] = useState([]);
+    const [paymentList, setPaymentList] = useState([]);
     const [bank, setBank] = useState();
     const [bankDialog, setBankDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
@@ -23,15 +23,15 @@ function Invoicedata() {
     const router = useRouter();
 
     useEffect(() => {
-        showInvoiceList();
+        showPaymentList();
     }, []);
 
-    const showInvoiceList = async () => {
+    const showPaymentList = async () => {
         try {
-            const response = await axiosInterceptorInstance.get('/api/invoice/GetListAllInvoice');
+            const response = await axiosInterceptorInstance.get('/api/payment/GetListpaymentHis');
             console.log("token ==>", response)
             if (response.status === 200 || response.status === 201) {
-                setInvoiceList(response.data);
+                setPaymentList(response.data);
             }
 
         } catch (error) {
@@ -75,21 +75,24 @@ function Invoicedata() {
 
 
     const totalamountCapital = (rowData) => {
-        return formatCurrency(rowData.amount_capital);
+        return formatCurrency(rowData.capital_paid);
     };
 
     const totalamountInterest = (rowData) => {
-        return formatCurrency(rowData.amount_interest);
+        return formatCurrency(rowData.interest_paid);
     };
 
     const totalamountOther = (rowData) => {
-        return formatCurrency(rowData.amount_other);
+        return formatCurrency(rowData.other_paid);
+    };
+
+    const totalamount_kip = (rowData) => {
+        return formatCurrency(rowData.amount_kip);
     };
 
     const dateBodyTemplate = (rowData) => {
         return formatDate(rowData.date_in);
     };
-
 
     const editBankDialogFooter = (
         <>
@@ -108,7 +111,6 @@ function Invoicedata() {
     const actionBodyTemplate = (rowData) => {
         return (
             <>
-
                 <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2"  />
                 <Button icon="pi pi-user-edit" className="p-button-rounded p-button-warning mr-2" onClick={() => confirmDeleteBank(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeleteBank(rowData)} />
@@ -116,19 +118,30 @@ function Invoicedata() {
         );
     };
 
-    const header = (
-        <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h4 className="m-0 text-primary ">ຂໍ້ມູນໃບ Invoice</h4>
-            <span className="block mt-2 md:mt-0 p-input-icon-left">
-                <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
-            </span>
-        </div>
-    );
-
     const exportCSV = () => {
         dt.current.exportCSV();
     };
+    
+    const header = (
+        <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h4 className="m-0 text-primary ">ປະຫວັດການຊຳລະໜີ້</h4>
+            <span className="block mt-2 md:mt-0 p-input-icon-left">
+                <i className="pi pi-search" />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />    
+            </span>
+          
+              <Button
+              label="ຟາຍ Excel"
+              icon="pi pi-upload"
+              className="p-button-success"
+              onClick={exportCSV}
+            />
+        
+         
+      
+        </div>
+    );
+
 
     return (
         <div className="grid crud-demo">
@@ -138,29 +151,31 @@ function Invoicedata() {
 
                     <div className=''>
                         <DataTable
-                            dataKey="inv_id"
-                            value={invoiceList}
+                          ref={dt}
+                            dataKey="p_id"
+                            value={paymentList}
                             tableStyle={{ minWidth: '78rem' }}
                             paginator
                             rows={10}
                             rowsPerPageOptions={[5, 10, 25]}
                             className="datatable-responsive"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} payment"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Banks" globalFilter={globalFilter} header={header}
                             emptyMessage="No products found."
-                            header={header}
+
                         >
-                            <Column field="inv_id" header="ລະຫັດ" sortable headerStyle={{ minWidth: '8rem' }} ></Column>
-                            <Column field="invoice_no" header="ລະຫັດ Invoice" sortable headerStyle={{ minWidth: '8rem' }}></Column>
+                            <Column field="inv_id" header="ລະຫັດ Invoice" sortable headerStyle={{ minWidth: '8rem' }} ></Column>
                             <Column field="loan_no" header="ເລກທີສັນຍາ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
                             <Column field="project" header="ຊື່ໂຄງການ" sortable headerStyle={{ minWidth: '15rem' }}></Column>
-                            <Column field="amount_capital" header="ຈຳນວນເງິນຕົ້ນທຶນ" dataType="numeric" sortable headerStyle={{ minWidth: '10rem' }} body={totalamountCapital} ></Column>
-                            <Column field="amount_interest" header="ຈຳນວນເງິນດອກເບ້ຍ" dataType="numeric" sortable headerStyle={{ minWidth: '10rem' }} body={totalamountInterest} ></Column>
-                            <Column field="amount_other" header="ຈຳນວນເງິນອື່ນໆ" dataType="numeric" sortable headerStyle={{ minWidth: '10rem' }} body={totalamountOther} ></Column>
-                            <Column field="atm_name" header="ຊື່ບັນຊີ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
-                            <Column field="atm_number" header="ເລກບັນຊີ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
-                            <Column field="date_in" header="ວັນທີເພີ່ມ" sortable headerStyle={{ minWidth: '10rem' }} ></Column>
-                            <Column body={actionBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                            <Column field="capital_paid" header="ຊຳລະຕົ້ນທຶນ" dataType="numeric" sortable headerStyle={{ minWidth: '10rem' }} body={totalamountCapital} ></Column>
+                            <Column field="interest_paid" header="ຊຳລະດອກເບ້ຍ" dataType="numeric" sortable headerStyle={{ minWidth: '10rem' }} body={totalamountInterest} ></Column>
+                            <Column field="other_paid" header="ຊຳລະເງິນອື່ນໆ" dataType="numeric" sortable headerStyle={{ minWidth: '10rem' }} body={totalamountOther} ></Column>          
+                            <Column field="currency" header="ສະກຸນເງິນ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
+                            <Column field="amount_kip" header="ຈຳນວນຊຳລະເງິນກີບ" sortable headerStyle={{ minWidth: '10rem' }} body={totalamount_kip}></Column>
+                            <Column field="currency_paid" header="ອັດຕາແລກປ່ຽນ" sortable headerStyle={{ minWidth: '10rem' }} ></Column>
+                            <Column field="payment_date" header="ວັນທີຊຳລະ" sortable headerStyle={{ minWidth: '10rem' }} ></Column>
+                           
+                            {/* <Column body={actionBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column> */}
                         </DataTable>
 
 
@@ -171,4 +186,4 @@ function Invoicedata() {
     );
 }
 
-export default Invoicedata;
+export default PaymentHistory;

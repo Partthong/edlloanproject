@@ -378,7 +378,7 @@ function Bank() {
                
                 <div className="my-2">
                 {/* <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="ພິມ" className="mr-2 inline-block" /> */}
-                <Button label="ພິມລາຍງານ" icon="pi pi-print" className="p-button-danger mr-2" onClick={printDocument} />
+                <Button label="ພິມລາຍງານ" icon="pi pi-print" className="p-button-help mr-2" onClick={printDocument} />
                 <Button label="Excel" icon="pi pi-upload" className="p-button-success"  />
                 {/* <Button label="Import file" icon="pi pi-save" className="p-button-success mr-2" onClick={nextPage} /> */}
                 </div>
@@ -418,10 +418,10 @@ function Bank() {
                             rowsPerPageOptions={[5, 10, 25]}
                             className="datatable-responsive"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Banks" globalFilter={globalFilter} header={header}
                             emptyMessage="No products found."
                             responsiveLayout="scroll"
-                            header={header}
+                           
                         >
                                <Column
                 header="#"

@@ -4,18 +4,24 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
-
+import { Dialog } from 'primereact/dialog';
 import React, { useEffect, useRef, useState } from 'react';
 import axiosInterceptorInstance from '../../../demo/components/axios';
 
 function WithdrawData() {
-
+    let emptyWithdraw = {
+        invoicew_no: "",
+        l_id: "",
+        invamount_withdraw: "",
+        date_inv1: "",
+        creator: "admin",
+      };
     const [withdrawList, setWithdrawList] = useState([]);
-    const [bank, setBank] = useState();
+    const [withdraw, setWithdraw] = useState(emptyWithdraw);
     const [bankDialog, setBankDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
     const [deleteBankDialog, setDeleteBankDialog] = useState(false);
-    const [editBankDialog, setEditBankDialog] = useState(false);
+    const [editWithdrawDialog, setEditWithdrawDialog] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
 
@@ -46,14 +52,18 @@ function WithdrawData() {
     const toast = useRef(null);
     const dt = useRef(null);
 
+    const editWithdraw = (withdraw) => {
+        setWithdraw({ ...withdraw });
+        setEditWithdrawDialog(true);
+    };
 
     const hideDialog = () => {
         setSubmitted(false);
         setBankDialog(false);
     };
 
-    const hideEditBankDialog = () => {
-        setEditBankDialog(false);
+    const hideEditWithdrawDialog = () => {
+        setEditWithdrawDialog(false);
     };
 
     const hideDeleteBankDialog = () => {
@@ -67,9 +77,9 @@ function WithdrawData() {
 
 
 
-    const editBankDialogFooter = (
+    const editWithdrawDialogFooter = (
         <>
-            <Button label="ປິດອອກ" icon="pi pi-times" className="p-button-text " onClick={hideEditBankDialog} />
+            <Button label="ປິດອອກ" icon="pi pi-times" className="p-button-text " onClick={hideEditWithdrawDialog} />
             <Button label="ບັນທຶກ" icon="pi pi-check" className="p-button-info " onClick={''} />
         </>
     );
@@ -84,7 +94,7 @@ function WithdrawData() {
     const actionBodyTemplate = (rowData) => {
         return (
             <>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2"  />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editWithdraw(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-danger"  />
             </>
         );
@@ -133,7 +143,17 @@ function WithdrawData() {
                             <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                         </DataTable>
 
-
+                        <Dialog visible={editWithdrawDialog} style={{ width: '450px' }} header="ແກ້ໄຂຂໍ້ມູນການຖອນ" modal className="p-fluid" footer={editWithdrawDialog} onHide={hideEditWithdrawDialog}>
+                            <div className="field">
+                                <label htmlFor="name">ຈຳນວນເງິນຖອນ</label>
+                                <InputText id="name" value={withdraw.loan_no} onChange={(e) => setWithdraw({ ...withdraw, loan_no: e.target.value })} required />
+                                <b className="hidden">{withdraw.w_id}</b>
+                            </div>
+                            <div className="field">
+                                <label htmlFor="name">ເລກບັນຊີ</label>
+                                <InputText id="name" value={withdraw.invamount_withdraw} onChange={(e) => setWithdraw({ ...withdraw, invamount_withdraw: e.target.value })} />
+                            </div>
+                        </Dialog>
 
                     </div>
                 </div>

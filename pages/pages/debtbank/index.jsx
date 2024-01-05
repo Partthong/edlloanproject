@@ -173,12 +173,12 @@ function DebtBank() {
       <>
         <Button
           icon="pi pi-eye"
-          label="ປະຫວັດການຖອນ"
+          label="ການຖອນ"
           className="p-button-rounded p-button-success mb-1"
         />
         <Button
           icon="pi pi-eye"
-          label="ປະຫວັດການຊຳລະ"
+          label="ການຊຳລະ"
           className="p-button-rounded p-button-danger "
           onClick={() => routPagetoInvoiceData(rowData)}
         />
@@ -286,7 +286,7 @@ function DebtBank() {
             <Dialog
               onShow={SelectByIDHandler}
               visible={editBankDialog}
-              style={{ width: "1200px" }}
+              style={{ width: "1300px" }}
               header="ຊື່ບັນດາໂຄງການໜີ້ກູ້ຢືມ"
               modal
               className="p-fluid "

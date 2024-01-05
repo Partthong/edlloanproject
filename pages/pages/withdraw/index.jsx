@@ -23,12 +23,15 @@ function Withdraw() {
         withdraw_date: '',
         creator: 'admin',
         total_withdraw:'',
-        total_balance:''
+        total_balance: '',
+        date_inv: '',
+       
     };
     const [withdrawvalue, setWithdrawvalue] = useState(0);
     const [withdrawList, setWithdrawList] = useState([]);
     const [withdraw, setWithdraw] = useState(emptyWithdraw );
     const [paymentDialog, setPaymentDialog] = useState(false);
+    const [editPaymentDialog, setEditPaymentDialog] = useState(false);
     const [checkcapital, setCheckcapital] = useState(0);
     const [checkinterest, setCheckinterest] = useState(0);
     const [checklibor, setChecklibor] = useState(0);
@@ -64,7 +67,6 @@ function Withdraw() {
 
     const InsertData = async () => {
 
-    
           try {
             var raw = {
                 l_id: withdraw.l_id,
@@ -72,14 +74,11 @@ function Withdraw() {
                 amount_withdraw: withdraw.invamount_withdraw,
                 invamount_withdraw: (withdraw.invamount_withdraw - withdraw.invamount_withdraw),
                 withdraw_date: moment(withdraw.date_inv).format("YYYY-MM-DD"),
-
                 creator: 'admin',
                 total_withdraw: (withdraw.total_withdraw + withdraw.invamount_withdraw),
                 total_balance: (withdraw.total_withdraw + withdraw.invamount_withdraw)
     
             };
-    
-
       
             const response1 = await axiosInterceptorInstance.post(
               "/api/withdraw/InsertWithdraw",
@@ -111,8 +110,7 @@ function Withdraw() {
                 detail: "ບັນທຶກຂໍ້ມູນສຳເລັດ",
                 life: 3000,
               });
-          
-      
+               
             
             }
           } catch (error) {
@@ -123,21 +121,63 @@ function Withdraw() {
               detail: "Authorization has been denied",
             });
             router.push("/auth/login");
-          }
-        
-     
+          }    
       };
 
+      const UpdateData = async () => {
+        try {
+        
+            var raw = {
+                inw_id: withdraw.inw_id,
+                invoicew_no: withdraw.invoicew_no,
+                invamount_withdraw: withdraw.invamount_withdraw,
+                date_inv: moment(withdraw.date_inv).format("YYYY-MM-DD"),
+            };
+    
+            const response = await axiosInterceptorInstance.post(
+              "/api/invoicewithdraw/UpdateInvWithdrawbyId",
+              raw
+            );
+    
+            if (response.status === 200 || response.status === 201) {
+              toast.current.show({
+                severity: "success",
+                summary: "Successful",
+                detail: "ອັບເດດຂໍ້ມູນສຳເລັດ",
+                life: 3000,
+              });
+                
+              setWithdraw(emptyWithdraw);
+              setEditPaymentDialog(false);
+              showInvoiceWithdraw();
+            }
+         
+        } catch (error) {
+          console.error(error);
+          toast.current.show({
+            severity: "error",
+            summary: "ຜິດພາດ",
+            detail: "Authorization has been denied",
+          });
+        
+        }
+      };
 
 
     const toast = useRef(null);
     const dt = useRef(null);
 
-
     const withdraws = (withdraw) => {
         setWithdraw({ ...withdraw });
         setPaymentDialog(true);
+      
     };
+
+    const editwithdraws = (withdraw) => {
+        setWithdraw({ ...withdraw }); 
+        setEditPaymentDialog(true);
+    };
+
 
     const hideDialog = () => {
         setSubmitted(false);
@@ -146,6 +186,10 @@ function Withdraw() {
 
     const hidePaymentDialog = () => {
         setPaymentDialog(false);
+    };
+
+    const hideEditPaymentDialog = () => {
+        setEditPaymentDialog(false);
     };
 
     const hideDeleteBankDialog = () => {
@@ -157,14 +201,17 @@ function Withdraw() {
         setDeleteBankDialog(true);
     };
 
-
-
-
-
     const paymentDialogFooter = (
         <>
             <Button label="ປິດອອກ" icon="pi pi-times" className="p-button-text " onClick={hidePaymentDialog} />
             <Button label="ຢຶນຢັນ" icon="pi pi-check" className="p-button-success " onClick={InsertData} />
+        </>
+    );
+
+    const editpaymentDialogFooter = (
+        <>
+            <Button label="ປິດອອກ" icon="pi pi-times" className="p-button-text " onClick={hideEditPaymentDialog} />
+            <Button label="ແກ້ໄຂ" icon="pi pi-pencil" className="p-button-danger " onClick={UpdateData} />
         </>
     );
 
@@ -178,8 +225,9 @@ function Withdraw() {
     const actionBodyTemplate = (rowData) => {
         return (
             <>
-
                 <Button label="ຖອນ" icon="pi pi-fw pi-dollar" className="p-button-success hover:bg-green-400 hover:text-white mr-2 bg-white text-green-600 h-3" onClick={() => withdraws(rowData)} outlined />
+                <Button label="ແກ້ໄຂ" icon="pi pi-user-edit" className="p-button-success hover:bg-red-400 hover:text-white mr-2 bg-white text-red-600 h-3" onClick={() => editwithdraws(rowData)} outlined />
+               
             </>
         );
     };
@@ -196,6 +244,14 @@ function Withdraw() {
     const exportCSV = () => {
         dt.current.exportCSV();
     };
+
+    const onInputNumberChange = (e, name) => {
+        const val = e.value || 0;
+        let _invoice = { ...withdraw };
+        _invoice[`${name}`] = val;
+    
+        setWithdraw(_invoice);
+      };
 
 
     return (
@@ -222,14 +278,13 @@ function Withdraw() {
                             className="datatable-responsive"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-                            emptyMessage="No products found."          
-                        >
+                            emptyMessage="No products found." >
                             <Column field="inw_id" header="ລະຫັດ" sortable headerStyle={{ minWidth: '8rem' }}></Column>
-                            <Column field="invoicew_no" header="ລະຫັດ Invoice" sortable headerStyle={{ minWidth: '8rem' }}></Column>
+                            <Column field="invoicew_no" header="ເລກທີ Invoice" sortable headerStyle={{ minWidth: '8rem' }}></Column>
                             <Column field="loan_no" header="ເລກທີສັນຍາ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
                             <Column field="project" header="ຊື່ໂຄງການ" sortable headerStyle={{ minWidth: '15rem' }}></Column>
                             <Column field="date_inv" header="ວັນທີເພີ່ມ" sortable headerStyle={{ minWidth: '10rem' }}></Column>
-                            <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+                            <Column header="ຈັດການ" body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                         </DataTable>
 
                         <Dialog visible={paymentDialog} style={{ width: '650px' }} header="ການຖອນເງິນກູ້" modal className="p-fluid " footer={paymentDialogFooter} onHide={hidePaymentDialog}>
@@ -252,7 +307,7 @@ function Withdraw() {
 
                                 <div className="field col ">
                                     <label htmlFor="name" className="">
-                                        ເລກທີເງິນກູ້ຢຶມ
+                                        ເລກທີສັນຍາ
                                     </label>
                                     <InputText className="text-blue-500" id="name" value={withdraw.loan_no} disabled />
                                 </div>
@@ -288,12 +343,61 @@ function Withdraw() {
                                 </div>
                                 <div className="field col-6">
                                 <label htmlFor="quantity" className="font-bold">
-                                        ວັນທີຖອນ
+                                ວັນ,ເດືອນ,ປີຖອນ
                                     </label>
                                     <Calendar dateFormat="yy-mm-dd" onChange={(e) => setWithdraw({ ...withdraw, date_inv: e.target.value })} showIcon />
                                 </div>
 
                             </div>
+
+                        </Dialog>
+
+                        <Dialog visible={editPaymentDialog} style={{ width: '450px' }} header="ແກ້ໄຂຂໍ້ມູນ" modal className="p-fluid " footer={editpaymentDialogFooter} onHide={hideEditPaymentDialog}> 
+                                <div className="field col">
+                                    <label htmlFor="name" className="">
+                                        ລະຫັດ Invoice
+                                    </label>
+                                <InputText id="name" value={withdraw.inw_id} disabled />               
+                                </div>
+
+                                <div className="field col">
+                                    <label htmlFor="name" className="">
+                                        ເລກທີ Invoice
+                                    </label>
+                                    <InputText className="text-blue-500" id="name" value={withdraw.invoicew_no} 
+                                    onChange={(e) =>
+                                        setWithdraw({ ...withdraw, invoicew_no: e.target.value })
+                                    }  />
+                                </div>
+                           
+                            <div className="field col text-red-600" >
+                                    <label htmlFor="name" className="font-bold">
+                                        ຈຳນວນເງິນຖອນກູ້ຢືມໃນຄັ້ງນີ້
+                                    </label>
+                                <InputNumber id="name" 
+                                   mode="decimal"
+                                   minFractionDigits={2}
+                                value={withdraw.invamount_withdraw}
+                                onValueChange={(e) =>
+                                    onInputNumberChange(e, "invamount_withdraw")
+                                  }
+                                     />
+                                </div>
+
+                        
+                           
+                            <div className="field col">
+                                    <label htmlFor="name" className="">
+                                        ສະກຸນເງິນ
+                                    </label>
+                                    <InputText id="name" className="text-blue-500" value={withdraw.currency} disabled />
+                                </div>
+                                <div className="field col">
+                                <label htmlFor="quantity" className="">
+                                        ວັນ,ເດືອນ,ປີຖອນ
+                                    </label>
+                                    <Calendar dateFormat="yy-mm-dd" onChange={(e) => setWithdraw({ ...withdraw, date_inv: e.target.value })} showIcon />
+                                </div>
 
                         </Dialog>
 

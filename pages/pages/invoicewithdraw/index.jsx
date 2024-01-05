@@ -134,21 +134,32 @@ function InvoiceWithdraw() {
     setInsertInvoice(_invoice);
   };
 
+  const leftToolbarTemplate = () => {
+    return (
+        <React.Fragment>
+            <div className="">
+          <h4 className=" font-semibold text-green-600 ">ເພີ່ມ Invoice ຖອນເງິນກູ້</h4>
+            </div>
+        </React.Fragment>
+    );
+};
+
+
   const rightToolbarTemplate = () => {
     return (
       <React.Fragment>
         <Button
           label="ບັນທຶກ"
           icon="pi pi-plus"
-          className="mr-2 p-button-info"
+          className="p-button-info"
           onClick={InsertData}
         />
-        <Button
-          label="ແກ້ໄຂຂໍ້ມູນ"
-          icon="pi pi-pencil"
+        {/* <Button
+          label="ເບີ່ງຂໍ້ມູນ"
+          icon="pi pi-eye"
           className="mr-2 p-button-secondary"
           onClick={routPagetoInvoiceWithdrawData}
-        />
+        /> */}
       </React.Fragment>
     );
   };
@@ -180,9 +191,9 @@ function InvoiceWithdraw() {
       <div className="col-12 md:col-12">
         <div className="card ">
           <Toast ref={toast} />
-          <Toolbar className="mb-3  " left={rightToolbarTemplate}></Toolbar>
-          <h3 className="mb-5  text-green-500">ຂໍເບີກຖອນເງິນກູ້</h3>
-          <div className="p-fluid formgrid grid">
+          <Toolbar className="" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+        
+          <div className="p-fluid formgrid grid mt-5">
             <div className="field col-12 md:col-12">
               <label htmlFor="loan_no" className="text-blue-500">
                 ປ້ອນເລກທີສັນຍາ
@@ -265,6 +276,8 @@ function InvoiceWithdraw() {
               <label htmlFor="name1">ຈຳນວນເງິນຖອນ</label>
               <InputNumber
                 value={insertInvoice.invamount_withdraw}
+                mode="decimal"
+                minFractionDigits={2}
                 onValueChange={(e) =>
                   onInputNumberChange(e, "invamount_withdraw")
                 }
@@ -287,8 +300,8 @@ function InvoiceWithdraw() {
           </div>
         </div>
       </div>
-
-      <div className="field col">
+    
+      <div className="field col-12">
         <div className="card flex justify-content-center">
           <Toast ref={toast}></Toast>
           <FileUpload
@@ -301,7 +314,9 @@ function InvoiceWithdraw() {
           />
         </div>
       </div>
+
     </div>
+    
   );
 }
 

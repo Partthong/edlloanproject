@@ -70,15 +70,15 @@ const AppMenu = () => {
                     icon: 'pi pi-fw pi-user',
                     items: [
                         {
-                            label: 'ຂໍ້ມູນຜູ້ໃຊ້',
+                            label: 'ເພີ່ມຜູ້ໃຊ້',
                             icon: 'pi pi-fw pi-user-plus',
                             to: '/auth/login'
-                        },
-                        {
-                            label: 'ລົງທະບຽນ',
-                            icon: 'pi pi-fw pi-id-card',
-                            to: '/auth/login'
                         }
+                        // {
+                        //     label: 'ລົງທະບຽນ',
+                        //     icon: 'pi pi-fw pi-id-card',
+                        //     to: '/auth/login'
+                        // }
 
                     ]
                 },

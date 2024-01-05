@@ -169,12 +169,12 @@ function DebtDirect() {
       <>
         <Button
           icon="pi pi-eye"
-          label="ປະຫວັດການຖອນ"
+          label="ການຖອນ"
           className="p-button-rounded p-button-success mb-1"
         />
         <Button
           icon="pi pi-eye"
-          label="ປະຫວັດການຊຳລະ"
+          label="ການຊຳລະ"
           className="p-button-rounded p-button-danger "
           onClick={() => routPagetoInvoiceData(rowData)}
         />
@@ -275,14 +275,14 @@ function DebtDirect() {
               ></Column>
               <Column
                 body={actionBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
+                headerStyle={{ minWidth: "5rem" }}
               ></Column>
             </DataTable>
 
             <Dialog
               onShow={SelectByIDHandler}
               visible={editBankDialog}
-              style={{ width: "1200px" }}
+              style={{ width: "1300px" }}
               header="ຊື່ບັນດາໂຄງການໜີ້ກູ້ຢືມ"
               modal
               className="p-fluid "
@@ -292,7 +292,7 @@ function DebtDirect() {
               <DataTable
                 dataKey="b_id"
                 value={loanList}
-                tableStyle={{ minWidth: "65rem" }}
+                tableStyle={{ minWidth: "75rem" }}
                 paginator
                 rows={10}
                 stripedRows

@@ -214,9 +214,7 @@ function Invoice() {
     });
   };
 
-  const routPagetoInvoiceData = () => {
-    router.push("/pages/invoicedata");
-  };
+
 
   const onInputNumberChange = (e, name) => {
     const val = e.value || 0;
@@ -225,21 +223,27 @@ function Invoice() {
     setInsertInvoice(_invoice);
   };
 
+  const leftToolbarTemplate = () => {
+    return (
+        <React.Fragment>
+            <div className="my-2">
+         
+          <h4 className=" font-semibold text-red-600 ">ເພີ່ມ Invoice ຊຳລະໜີ້</h4>
+            </div>
+        </React.Fragment>
+    );
+};
+
   const rightToolbarTemplate = () => {
     return (
       <React.Fragment>
         <Button
           label="ບັນທຶກ"
-          icon="pi pi-plus"
+          icon="pi pi-check"
           className="mr-2 p-button-info"
           onClick={InsertData}
         />
-        <Button
-          label="ແກ້ໄຂຂໍ້ມູນ"
-          icon="pi pi-pencil"
-          className="mr-2 p-button-secondary"
-          onClick={routPagetoInvoiceData}
-        />
+       
       </React.Fragment>
     );
   };
@@ -271,10 +275,9 @@ function Invoice() {
       <div className="col-12 md:col-12">
         <div className="card ">
           <Toast ref={toast} />
-          <Toolbar className="mb-3  " left={rightToolbarTemplate}></Toolbar>
-
-          <h3 className=" text-red-600 ">ຂໍຊຳລະໜີ້ກູ້ຢືມ</h3>
-          <div className="p-fluid formgrid grid mb-0 ">
+          <Toolbar className="" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+       
+          <div className="p-fluid formgrid grid mt-5 ">
             <div className="field col-12 md:col-12">
               <label htmlFor="loan_no" className="text-blue-600">
                 ປ້ອນເລກທີສັນຍາ
@@ -445,9 +448,7 @@ function Invoice() {
               <label htmlFor="age2">ຈຳນວນມື້</label>
               <InputNumber
                value={sumday.days} onValueChange={(e) => setSumday({ ...sumday, days: e.value }) }
-              //  value={paymentcapital.amount_capital} onValueChange={(e) => setPaymentcapital({...paymentcapital, amount_capital: e.value }) }
-
-               
+              //  value={paymentcapital.amount_capital} onValueChange={(e) => setPaymentcapital({...paymentcapital, amount_capital: e.value }) }         
               />
             </div>
 
@@ -561,8 +562,12 @@ function Invoice() {
               onClick={onCalculate}
             />
           </div>
+          
         </div>
+     
       </div>
+
+      
     </div>
   );
 }

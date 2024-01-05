@@ -44,6 +44,4 @@ axiosInterceptorInstance.interceptors.response.use(
 );
 // End of Response interceptor
 
-
-
 export default axiosInterceptorInstance;

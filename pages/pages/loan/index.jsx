@@ -60,9 +60,9 @@ function Loan() {
   const [dropdownInteresttype, setDropdownInteresttype] = useState(null);
 
   const [autoId, setAutoid] = useState(0);
+  const [globalFilter, setGlobalFilter] = useState(null);
 
   const router = useRouter();
-
 
   useEffect(() => {
     showLoanList();
@@ -377,7 +377,7 @@ function Loan() {
       <Button
         label="ບັນທຶກ"
         icon="pi pi-check"
-        className="p-button-primary "
+        className="p-button-info "
         onClick={InsertData}
       />
     </>
@@ -448,6 +448,7 @@ function Loan() {
   const exportCSV = () => {
     dt.current.exportCSV();
   };
+
   const leftToolbarTemplate = () => {
     return (
       <React.Fragment>
@@ -466,18 +467,16 @@ function Loan() {
   const rightToolbarTemplate = () => {
     return (
       <React.Fragment>
-        <FileUpload
-          mode="basic"
-          accept="image/*"
-          maxFileSize={1000000}
-          label="Import"
-          chooseLabel="ພິມ"
-          className="mr-2 inline-block"
+        <Button
+          label="ພິມລາຍງານ"
+          icon="pi pi-print"
+          className="p-button-help mr-2"
         />
         <Button
           label="ຟາຍ Excel"
           icon="pi pi-upload"
-          className="p-button-help"
+          className="p-button-success"
+          onClick={exportCSV}
         />
       </React.Fragment>
     );
@@ -504,6 +503,7 @@ function Loan() {
           ></Toolbar>
           <div>
             <DataTable
+              ref={dt}
               dataKey="l_id"
               value={loanList}
               tableStyle={{ minWidth: "78rem" }}
@@ -512,12 +512,18 @@ function Loan() {
               rowsPerPageOptions={[5, 10, 25]}
               className="datatable-responsive"
               paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Loans"
+              globalFilter={globalFilter}
+              header={header}
               emptyMessage="No products found."
               responsiveLayout="scroll"
-              header={header}
+              // header={header}
             >
-            <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
+              <Column
+                header="#"
+                headerStyle={{ width: "3rem" }}
+                body={(data, options) => options.rowIndex + 1}
+              ></Column>
               {/* <Column
                 field="l_id"
                 header="ລະຫັດ"

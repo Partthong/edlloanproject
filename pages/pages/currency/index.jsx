@@ -109,7 +109,7 @@ function Currencies() {
     try {
     
         var raw = {
-        c_id: currency.c_id,
+          c_id: currency.c_id,
           currency: currency.currency,
           rate: currency.rate
         };
@@ -355,8 +355,7 @@ function Currencies() {
               modal
               className="p-fluid"
               footer={editCurrencyDialogFooter}
-              onHide={hideEditCurrencyDialog}
-            >
+              onHide={hideEditCurrencyDialog} >
               <div className="field">
                 <label htmlFor="name">ສະກຸນເງິນ</label>
                 <InputText
