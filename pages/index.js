@@ -20,8 +20,14 @@ const Dashboard = () => {
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
 
-  const [chartbarData, setChartbarData] = useState({});
-  const [chartbarOptions, setChartbarOptions] = useState({});
+  const [chartData2, setChartData2] = useState({});
+  const [chartOptions2, setChartOptions2] = useState({});
+
+  const [chartbarPaymentData, setChartPaymentbarData] = useState({});
+  const [chartbarPaymentOptions, setChartbarPaymentOptions] = useState({});
+
+  const [chartbarWithdrawData, setChartbarWithdrawData] = useState({});
+  const [chartbarWithdrawOptions, setChartbarWithdrawOptions] = useState({});
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
   const [loanAmountCurrency, setLoanAmountCurrency] = useState([]);
@@ -31,6 +37,7 @@ const Dashboard = () => {
   const [showTotalPaymentLoan, setShowTotalPaymentLoan] = useState(null);
   const [showTotalBalanceLoan, setShowTotalBalanceLoan] = useState(null);
   const [city, setCity] = useState(null);
+  
 
   useEffect(() => {
     checkAuthorization();
@@ -131,74 +138,6 @@ const Dashboard = () => {
   };
 
 
-
-  // const applyLightTheme = () => {
-  //   const lineOptions = {
-  //     plugins: {
-  //       legend: {
-  //         labels: {
-  //           color: "#495057",
-  //         },
-  //       },
-  //     },
-  //     scales: {
-  //       x: {
-  //         ticks: {
-  //           color: "#495057",
-  //         },
-  //         grid: {
-  //           color: "#ebedef",
-  //         },
-  //       },
-  //       y: {
-  //         ticks: {
-  //           color: "#495057",
-  //         },
-  //         grid: {
-  //           color: "#ebedef",
-  //         },
-  //       },
-  //     },
-  //   };
-
-  //   setLineOptions(lineOptions);
-  // };
-
-  // const applyDarkTheme = () => {
-  //   const lineOptions = {
-  //     plugins: {
-  //       legend: {
-  //         labels: {
-  //           color: "#ebedef",
-  //         },
-  //       },
-  //     },
-  //     scales: {
-  //       x: {
-  //         ticks: {
-  //           color: "#ebedef",
-  //         },
-  //         grid: {
-  //           color: "rgba(160, 167, 181, .3)",
-  //         },
-  //       },
-  //       y: {
-  //         ticks: {
-  //           color: "#ebedef",
-  //         },
-  //         grid: {
-  //           color: "rgba(160, 167, 181, .3)",
-  //         },
-  //       },
-  //     },
-  //   };
-
-  //   setLineOptions(lineOptions);
-  // };
-
-
-
-
   useEffect(() => {
     const documentStyle = getComputedStyle(document.documentElement);
     const data = {
@@ -207,15 +146,16 @@ const Dashboard = () => {
         {
           data: [500000000,100000000, 500000000],
           backgroundColor: [
-            documentStyle.getPropertyValue("--blue-400"),
-            documentStyle.getPropertyValue("--green-400"),
+            documentStyle.getPropertyValue("--red-400"),
             documentStyle.getPropertyValue("--orange-400"),
+            documentStyle.getPropertyValue("--yellow-400"),
           ],
           hoverBackgroundColor: [
-            documentStyle.getPropertyValue("--blue-300"),
-            documentStyle.getPropertyValue("--green-300"),
+            documentStyle.getPropertyValue("--red-300"),
             documentStyle.getPropertyValue("--orange-300"),
+            documentStyle.getPropertyValue("--yellow-300"),
           ],
+              
         },
       ],
     };
@@ -229,25 +169,19 @@ const Dashboard = () => {
 
 
   useEffect(() => {
+    const documentStyle = getComputedStyle(document.documentElement);
     const data = {
-        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        labels: ['2014','2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022','2023'],
         datasets: [
             {
-                label: 'Sales',
-                data: [540, 325, 702, 620],
+                label: 'ຊຳລະໜີ້',
+                data: [540, 325, 702, 620,540, 325, 702, 620,540, 325],
                 backgroundColor: [
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(153, 102, 255, 0.2)'
-                  ],
-                  borderColor: [
-                    'rgb(255, 159, 64)',
-                    'rgb(75, 192, 192)',
-                    'rgb(54, 162, 235)',
-                    'rgb(153, 102, 255)'
-                  ],
-                  borderWidth: 1
+                  documentStyle.getPropertyValue("--green-400"),              
+                ],
+                hoverBackgroundColor: [
+                  documentStyle.getPropertyValue("--green-300"),                
+                ],      
             }
         ]
     };
@@ -259,17 +193,96 @@ const Dashboard = () => {
         }
     };
 
-    setChartbarData(data);
-    setChartbarOptions(options);
+    setChartPaymentbarData(data);
+    setChartbarPaymentOptions(options);
 }, []);
 
-  // useEffect(() => {
-  //   if (layoutConfig.colorScheme === "light") {
-  //     applyLightTheme();
-  //   } else {
-  //     applyDarkTheme();
-  //   }
-  // }, [layoutConfig.colorScheme]);
+useEffect(() => {
+  const documentStyle = getComputedStyle(document.documentElement);
+  const data = {
+      labels: ['2014','2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022','2023'],
+      datasets: [
+          {
+              label: 'ກູ້ຢືມໜີ້',
+              data: [540, 325, 702, 620,540, 325, 702, 620,540, 325],
+              backgroundColor: [
+                documentStyle.getPropertyValue("--red-400")     
+              ],
+              hoverBackgroundColor: [
+                documentStyle.getPropertyValue("--red-300")    
+              ],     
+          }
+      ]
+  };
+  const options = {
+      scales: {
+          y: {
+              beginAtZero: true
+          }
+      }
+  };
+
+  setChartbarWithdrawData(data);
+  setChartbarWithdrawOptions(options);
+}, []);
+
+useEffect(() => {
+  const documentStyle = getComputedStyle(document.documentElement);
+  const textColor = documentStyle.getPropertyValue('--text-color');
+  const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+  const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+  const data = {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [
+          {
+              label: 'ກູ້ຢືມໜີ້',
+              backgroundColor: documentStyle.getPropertyValue('--red-400'),
+              borderColor: documentStyle.getPropertyValue('--red-400'),
+              data: [65, 59, 80, 81, 56, 55, 40]
+          }
+       
+      ]
+  };
+  const options = {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      aspectRatio: 0.8,
+      plugins: {
+          legend: {
+              labels: {
+                  fontColor: textColor
+              }
+          }
+      },
+      scales: {
+          x: {
+              ticks: {
+                  color: textColorSecondary,
+                  font: {
+                      weight: 500
+                  }
+              },
+              grid: {
+                  display: false,
+                  drawBorder: false
+              }
+          },
+          y: {
+              ticks: {
+                  color: textColorSecondary
+              },
+              grid: {
+                  color: surfaceBorder,
+                  drawBorder: false
+              }
+          }
+      }
+  };
+
+  setChartData2(data)
+  setChartOptions2(options);
+}, []);
+
 
 
   useEffect(() => {
@@ -475,32 +488,47 @@ const Dashboard = () => {
         </div>
       </div>
 
-    
-
+  
       <div className="col-12 xl:col-6">
-    
-        <div className="card ">
-        <h5>ສະຖິຕິປະເພດໜີ້ກູ້ຢືມ</h5>
-        <div className="flex justify-content-center"> 
-        <Chart
-            type="doughnut"
-            data={chartData}
-            options={chartOptions}
-            className="w-full md:w-20rem"
-          />
-        </div>
-         
+        <div className="card">
+        <h5>ສະຖິຕິ ການຊຳລະໜີ້ ແຕ່ປີ 2014 - ປະຈຸບັນ</h5>
+             <Chart type="bar" data={chartbarPaymentData} options={chartbarPaymentOptions} /> 
         </div>
       </div>
 
       <div className="col-12 xl:col-6">
         <div className="card">
-        <h5>ສະຖິຕິ ການຊຳລະໜີ້ ແລະ ກູ້ຢືມໜີ້ ແຕ່ປີ 2013 - ປະຈຸບັນ</h5>
-       
-             <Chart type="bar" data={chartbarData} options={chartbarOptions} />
-       
+        <h5>ສະຖິຕິ ການກູ້ຢືມໜີ້ ແຕ່ປີ 2014 - ປະຈຸບັນ</h5>      
+             <Chart type="bar" data={chartbarWithdrawData} options={chartbarWithdrawOptions} />
         </div>
       </div>
+
+      <div className="col-12 xl:col-6">
+    
+    <div className="card ">
+    <h5>ສະຖິຕິປະເພດໜີ້ກູ້ຢືມ</h5>
+    <div className="flex justify-content-center"> 
+    <Chart
+        type="doughnut"
+        data={chartData}
+        options={chartOptions}
+        className="w-full md:w-20rem"
+      />
+    </div>
+     
+    </div>
+  </div>
+
+  <div className="col-12 xl:col-6">
+    
+    <div className="card ">
+    <h5>ສະຖິຕິ ກູ້ຢືມທະນາຄານ</h5>
+   
+    <Chart type="bar" data={chartData2} options={chartOptions2} />
+ 
+     
+    </div>
+  </div>
 
       <div className="col-12 xl:col-12">
         <div className="card bg-blue-100">
