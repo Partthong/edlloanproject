@@ -77,7 +77,6 @@ function Withdraw() {
                 creator: 'admin',
                 total_withdraw: (withdraw.total_withdraw + withdraw.invamount_withdraw),
                 total_balance: (withdraw.total_withdraw + withdraw.invamount_withdraw)
-    
             };
       
             const response1 = await axiosInterceptorInstance.post(
@@ -163,7 +162,6 @@ function Withdraw() {
         }
       };
 
-
     const toast = useRef(null);
     const dt = useRef(null);
 
@@ -177,7 +175,6 @@ function Withdraw() {
         setWithdraw({ ...withdraw }); 
         setEditPaymentDialog(true);
     };
-
 
     const hideDialog = () => {
         setSubmitted(false);
@@ -293,8 +290,6 @@ function Withdraw() {
                                     <label htmlFor="name" className="">
                                         ລະຫັດ Invoice
                                     </label>
-
-
                                     <InputText id="name" value={withdraw.inw_id} disabled />
                                 </div>
 

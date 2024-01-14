@@ -160,7 +160,7 @@ function PaymentHistory() {
                             rowsPerPageOptions={[5, 10, 25]}
                             className="datatable-responsive"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Banks" globalFilter={globalFilter} header={header}
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} data" globalFilter={globalFilter} header={header}
                             emptyMessage="No products found."
 
                         >

@@ -33,12 +33,16 @@ function Payments() {
     amount_capital: "",
     amount_interest: "",
     amount_other: "",
-    remarks:"",
+    remarks: "",
     amount_capital2: "",
+    credit: "",
+    libor: "",
+    days: "",
   };
   const [invoiceList, setInvoiceList] = useState([]);
   const [payment, setPayment] = useState(emptyPayment);
   const [paymentDialog, setPaymentDialog] = useState(false);
+  const [editPaymentDialog, setEditPaymentDialog] = useState(false);
   const [checkcapital, setCheckcapital] = useState(false);
   const [checkinterest, setCheckinterest] = useState(false);
   const [checkother, setCheckOther] = useState(false);
@@ -109,85 +113,138 @@ function Payments() {
     }
   };
 
-  
-
   const InsertData = async () => {
-
     // if (rateCapital === '' || rateInterest === '' || rateOther === ''){
-      try {
+    try {
+      var raw = {
+        inv_id: payment.inv_id,
+
+        capital_paid: checkcapital ? payment.amount_capital : 0,
+        interest_paid: checkinterest ? payment.amount_interest : 0,
+        other_paid: checkother ? payment.amount_other : 0,
+
+        amount_kip: rateCapital + rateInterest + rateOther,
+        currency_paid: payment.rate,
+        payment_date: moment(payment.payment_date).format("YYYY-MM-DD"),
+        creator: "admin",
+        create_date: moment().format("YYYY-MM-DD"),
+        l_id: payment.l_id,
+
+        total_balance:
+          payment.total_balance - (checkcapital ? payment.amount_capital : 0),
+        total_payment:
+          payment.total_payment + (checkcapital ? payment.amount_capital : 0),
+
+        amount_capital:
+          updateamountcapital.amount_capital -
+          (checkcapital ? payment.amount_capital : 0),
+        amount_interest:
+          updateamountinterest.amount_interest -
+          (checkinterest ? payment.amount_interest : 0),
+        amount_other:
+          updateamountother.amount_other -
+          (checkother ? payment.amount_other : 0),
+      };
+
+      // console.log(raw)
+
+      const response1 = await axiosInterceptorInstance.post(
+        "/api/payment/Insertpayment",
+        raw
+      );
+      const response2 = await axiosInterceptorInstance.post(
+        "/api/loan/UpdateTotalBalance",
+        raw
+      );
+      const response3 = await axiosInterceptorInstance.post(
+        "/api/invoice/UpdateInvoiceAmount",
+        raw
+      );
+
+      if (
+        response1.status === 200 &&
+        response2.status === 200 &&
+        response3.status === 200
+      ) {
+        setPayment(emptyPayment);
+        setTimeout(() => {
+          document.location.reload();
+        }, 3000);
+
+        toast.current.show({
+          severity: "success",
+          summary: "Successful",
+          detail: "ບັນທຶກຂໍ້ມູນສຳເລັດ",
+          life: 3000,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.current.show({
+        severity: "error",
+        summary: "ຜິດພາດ",
+        detail: "Authorization has been denied",
+      });
+      router.push("/auth/login");
+    }
+
+    // }
+    // else{
+    //   toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາເລືອກການຊຳລະ...!' });
+    // }
+  };
+
+  const UpdateData = async () => {
+    try {
+    
         var raw = {
-          inv_id: payment.inv_id,   
+            // inw_id: withdraw.inw_id,
+            // invoicew_no: withdraw.invoicew_no,
+            // invamount_withdraw: withdraw.invamount_withdraw,
+            // date_inv: moment(withdraw.date_inv).format("YYYY-MM-DD"),
+            inv_id: payment.inv_id,
+            invoice_no: payment.invoice_no,
 
-          capital_paid: checkcapital? payment.amount_capital:0,      
-          interest_paid: checkinterest? payment.amount_interest:0, 
-          other_paid: checkother? payment.amount_other:0, 
+            amount_capital: payment.amount_capital,
+            amount_interest: payment.amount_interest,
+            amount_other: payment.amount_other,
 
-          amount_kip: rateCapital + rateInterest + rateOther,   
-          currency_paid: payment.rate,    
-          payment_date: moment(payment.payment_date).format("YYYY-MM-DD"),   
-          creator: "admin",    
-          create_date: moment().format("YYYY-MM-DD"),   
-          l_id: payment.l_id,    
+            days: payment.days,
+            libor: payment.libor,
+            credit: payment.credit,
 
-          total_balance: payment.total_balance - (checkcapital? payment.amount_capital:0),    
-          total_payment: payment.total_payment + (checkcapital? payment.amount_capital:0),    
-
-          amount_capital: updateamountcapital.amount_capital - (checkcapital? payment.amount_capital:0),   
-          amount_interest: updateamountinterest.amount_interest - (checkinterest? payment.amount_interest:0), 
-          amount_other: updateamountother.amount_other - (checkother? payment.amount_other:0), 
-
+            atm_name:payment.atm_name,
+            atm_number: payment.atm_number,
+            date_in: moment(payment.date_in).format("YYYY-MM-DD")
+   
         };
 
-        // console.log(raw)
-  
-        const response1 = await axiosInterceptorInstance.post(
-          "/api/payment/Insertpayment",
-          raw
+        const response = await axiosInterceptorInstance.post(
+          "/api/invoice/UpdateInvoicebyid", raw
         );
-        const response2 = await axiosInterceptorInstance.post(
-          "/api/loan/UpdateTotalBalance",
-          raw
-        );
-        const response3 = await axiosInterceptorInstance.post(
-          "/api/invoice/UpdateInvoiceAmount",
-          raw
-        );
-  
-        if (
-          response1.status === 200 &&
-          response2.status === 200 &&
-          response3.status === 200
-        ) {
-          setPayment(emptyPayment);
-          setTimeout(() => {
-            document.location.reload();
-          }, 3000);
-  
+
+        if (response.status === 200 || response.status === 201) {
           toast.current.show({
             severity: "success",
             summary: "Successful",
-            detail: "ບັນທຶກຂໍ້ມູນສຳເລັດ",
+            detail: "ອັບເດດຂໍ້ມູນສຳເລັດ",
             life: 3000,
           });
-      
-  
-        
+            
+          setPayment(emptyPayment);
+          setEditPaymentDialog(false);
+          showListInvoice();
         }
-      } catch (error) {
-        console.error(error);
-        toast.current.show({
-          severity: "error",
-          summary: "ຜິດພາດ",
-          detail: "Authorization has been denied",
-        });
-        router.push("/auth/login");
-      }
      
-    // } 
-    // else{ 
-    //   toast.current.show({ severity: 'error', summary: 'ຜິດພາດ', detail: 'ກະລຸນາເລືອກການຊຳລະ...!' }); 
-    // }
- 
+    } catch (error) {
+      console.error(error);
+      toast.current.show({
+        severity: "error",
+        summary: "ຜິດພາດ",
+        detail: "Authorization has been denied",
+      });
+    
+    }
   };
 
   const toast = useRef(null);
@@ -221,6 +278,11 @@ function Payments() {
     setPaymentDialog(true);
   };
 
+  const editInvoice = (payment) => {
+    setPayment({ ...payment });
+    setEditPaymentDialog(true);
+  };
+
   const hideDialog = () => {
     setSubmitted(false);
     setBankDialog(false);
@@ -228,6 +290,10 @@ function Payments() {
 
   const hidePaymentDialog = () => {
     setPaymentDialog(false);
+  };
+
+  const hideEditPaymentDialog = () => {
+    setEditPaymentDialog(false);
   };
 
   const hideDeleteBankDialog = () => {
@@ -242,19 +308,17 @@ function Payments() {
   const checkpaymentCapital = (e) => {
     setCheckcapital(e.target.checked);
     if (e.target.checked) {
-      setPayment({...payment, amount_capital: payment.amount_capital})    
-      setRateCapital(payment.amount_capital * payment.rate);      
+      setPayment({ ...payment, amount_capital: payment.amount_capital });
+      setRateCapital(payment.amount_capital * payment.rate);
     } else {
       setRateCapital(0);
-     
     }
   };
-
 
   const checkpaymentInterest = (e) => {
     setCheckinterest(e.target.checked);
     if (e.target.checked) {
-      setPayment({...payment, amount_interest: payment.amount_interest})    
+      setPayment({ ...payment, amount_interest: payment.amount_interest });
       setRateInterest(payment.amount_interest * payment.rate);
     } else {
       setRateInterest(0);
@@ -264,13 +328,12 @@ function Payments() {
   const checkpaymentOther = (e) => {
     setCheckOther(e.target.checked);
     if (e.target.checked) {
-      setPayment({...payment, amount_other: payment.amount_other}) 
+      setPayment({ ...payment, amount_other: payment.amount_other });
       setRateOther(payment.amount_other * payment.rate);
     } else {
       setRateOther(0);
     }
   };
-
 
   const checkChangePaymentCapital = (e) => {
     setIsCheckchange((current) => !current);
@@ -311,6 +374,24 @@ function Payments() {
     </>
   );
 
+  const editpaymentDialogFooter = (
+    <>
+      <Button
+        label="ປິດອອກ"
+        icon="pi pi-times"
+        className="p-button-text "
+        onClick={hideEditPaymentDialog}
+      />
+      <Button
+        label="ແກ້ໄຂ"
+        icon="pi pi-pencil"
+        className="p-button-success "
+        onClick={UpdateData}
+        
+      />
+    </>
+  );
+
   const deleteBankDialogFooter = (
     <>
       <Button
@@ -338,6 +419,13 @@ function Payments() {
           onClick={() => payments(rowData)}
           outlined
         />
+        <Button
+          label="ແກ້ໄຂ"
+          icon="pi pi-user-edit"
+          className="p-button-success hover:bg-green-400 hover:text-white mr-2 bg-white text-green-600 h-3"
+          onClick={() => editInvoice(rowData)}
+          outlined
+        />
       </>
     );
   };
@@ -354,6 +442,14 @@ function Payments() {
       </span>
     </div>
   );
+
+  const onInputNumberChange = (e, name) => {
+    const val = e.value || 0;
+    let _invoice = { ...payment };
+    _invoice[`${name}`] = val;
+
+    setPayment(_invoice);
+  };
 
   const exportCSV = () => {
     dt.current.exportCSV();
@@ -524,14 +620,12 @@ function Payments() {
                   ເລືອກການຊຳລະ
                 </h5>
                 <div className="flex justify-content-start ">
-                  
                   <div className="col-4 flex  align-items-center">
                     <div className="ml-2">
                       <input
                         className=""
                         type="checkbox"
                         value={checkcapital}
-                     
                         onChange={checkpaymentCapital}
                         id="amount_capital"
                         name="amount_capital"
@@ -560,9 +654,11 @@ function Payments() {
                   <div className="col-4">
                     <InputNumber
                       id="name"
-                      value={checkcapital?payment.amount_capital:0}
-                      onValueChange={(e) => setPayment({...payment, amount_capital: e.value})}
-                      disabled={!isCheckchange}  
+                      value={checkcapital ? payment.amount_capital : 0}
+                      onValueChange={(e) =>
+                        setPayment({ ...payment, amount_capital: e.value })
+                      }
+                      disabled={!isCheckchange}
                     />
                   </div>
                 </div>
@@ -573,7 +669,9 @@ function Payments() {
                       className="text-red-500"
                       id="name"
                       placeholder="ກະລຸນາໃສ່ເຫດຜົນ"
-                      onChange={(e) => setPayment({...payment, remarks: e.value})}
+                      onChange={(e) =>
+                        setPayment({ ...payment, remarks: e.value })
+                      }
                     />
                   </div>
                 )}
@@ -596,8 +694,10 @@ function Payments() {
                   <div className=" col-4">
                     <InputNumber
                       id="name"
-                      value={checkinterest?payment.amount_interest:0}
-                      onValueChange={(e) => setPayment({...payment, amount_interest: e.value})}
+                      value={checkinterest ? payment.amount_interest : 0}
+                      onValueChange={(e) =>
+                        setPayment({ ...payment, amount_interest: e.value })
+                      }
                       disabled={!isCheckchange}
                     />
                   </div>
@@ -623,9 +723,11 @@ function Payments() {
                   <div className=" col-4">
                     <InputNumber
                       id="name"
-                      value={checkother?payment.amount_other:0}   
-                      onValueChange={(e) => setPayment({...payment, amount_other: e.value})}
-                      disabled={!isCheckchange}     
+                      value={checkother ? payment.amount_other : 0}
+                      onValueChange={(e) =>
+                        setPayment({ ...payment, amount_other: e.value })
+                      }
+                      disabled={!isCheckchange}
                     />
                   </div>
                 </div>
@@ -640,10 +742,10 @@ function Payments() {
                     className="text-red-500"
                     id="name"
                     value={rateCapital + rateInterest + rateOther}
-                  // value={updateamountcapital.amount_capital}
-                  // onValueChange={(e) =>
-                  //   setPayment({ ...payment, amount_kip: e.target.value })
-                  // }
+                    // value={updateamountcapital.amount_capital}
+                    // onValueChange={(e) =>
+                    //   setPayment({ ...payment, amount_kip: e.target.value })
+                    // }
 
                     disabled
                   />
@@ -686,6 +788,184 @@ function Payments() {
                     accept="pdf/*"
                     maxFileSize={1000000}
                     onUpload={onUpload}
+                  />
+                </div>
+              </div>
+            </Dialog>
+
+            <Dialog
+              visible={editPaymentDialog}
+              style={{ width: "750px" }}
+              header="ແກ້ໄຂໃບ Invoice"
+              maximizable
+              modal
+              className="p-fluid"
+              footer={editpaymentDialogFooter}
+              onHide={hideEditPaymentDialog}
+            >
+              <div className="formgrid grid">
+                <div className="field col">
+                  <label htmlFor="name" className="">
+                    ລະຫັດ Invoice
+                  </label>
+
+                  <InputText id="name" value={payment.inv_id} disabled />
+                </div>
+
+                <div className="field col">
+                  <label htmlFor="name" className="">
+                    ເລກທີໃບ Invoice
+                  </label>
+                  <InputText
+                    className="text-blue-500"
+                    id="name"
+                    value={payment.invoice_no}
+                    onChange={(e) =>
+                      setPayment({ ...payment, invoice_no: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="field col">
+                  <label htmlFor="name" className="">
+                    ສະກຸນເງິນ
+                  </label>
+                  <InputText
+                    id="name"
+                    className=""
+                    value={payment.currency}
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div className="formgrid grid ">
+                <div className="field col text-red-600">
+                  <label htmlFor="name" className="font-bold">
+                    ຈຳນວນຊຳລະເງິນຕົ້ນທຶນ
+                  </label>
+                  <InputNumber
+                    id="name"
+                    mode="decimal"
+                    minFractionDigits={2}
+                    value={payment.amount_capital}
+                    onValueChange={(e) =>
+                      onInputNumberChange(e, "amount_capital")
+                    }
+                  />
+                </div>
+
+                <div className="field col text-red-600">
+                  <label htmlFor="name" className="font-bold">
+                    ຈຳນວນຊຳລະເງິນດອກເບ້ຍ
+                  </label>
+                  <InputNumber
+                    id="name"
+                    mode="decimal"
+                    minFractionDigits={2}
+                    value={payment.amount_interest}
+                    onValueChange={(e) =>
+                      onInputNumberChange(e, "amount_interest")
+                    }
+                  />
+                </div>
+
+                <div className="field col text-red-600">
+                  <label htmlFor="name" className="font-bold">
+                    ຈຳນວນຊຳລະອື່ນໆ
+                  </label>
+                  <InputNumber
+                    id="name"
+                    mode="decimal"
+                    minFractionDigits={2}
+                    value={payment.amount_other}
+                    onValueChange={(e) =>
+                      onInputNumberChange(e, "amount_other")
+                    }
+                  />
+                </div>
+              </div>
+              <div className="formgrid grid ">
+                <div className="field col">
+                  <label htmlFor="age2" className="text-blue-600">ຈຳນວນມື້</label>
+                  <InputNumber
+                    value={payment.days}
+                    onValueChange={(e) =>
+                      setPayment({ ...payment, days: e.value })
+                    }
+                    //  value={paymentcapital.amount_capital} onValueChange={(e) => setPaymentcapital({...paymentcapital, amount_capital: e.value }) }
+                  />
+                </div>
+
+                <div className="field col">
+                  <label htmlFor="age2" className="text-blue-600">
+                    ອັດຕາ SOFR
+                  </label>
+                  <InputNumber
+                    value={payment.libor}
+                    onValueChange={(e) => onInputNumberChange(e, "libor")}
+                    mode="decimal"
+                    minFractionDigits={3}
+                    prefix="%"
+                  />
+                </div>
+
+                <div className="field col">
+                  <label htmlFor="age2" className="text-blue-600">
+                    Credit ສ່ວນຕ່າງ
+                  </label>
+                  <InputNumber
+                    value={payment.credit}
+                    onValueChange={(e) => onInputNumberChange(e, "credit")}
+                    mode="decimal"
+                    minFractionDigits={3}
+                    prefix="%"
+                  />
+                </div>
+              </div>
+              <div className="formgrid grid ">
+                <div className="field col">
+                  <label htmlFor="email1" className="text-blue-600">
+                    ຊື່ບັນຊີປາຍທາງ
+                  </label>
+                  <InputText
+                    id="atm_name"
+                    type="text"
+                    className=""
+                    value={payment.atm_name}
+                    onChange={(e) =>
+                      setPayment({ ...payment, atm_name: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="field col">
+                  <label htmlFor="email1" className="text-blue-600">
+                    ເລກບັນຊີປາຍທາງ
+                  </label>
+                  <InputText
+                    id="atm_number"
+                    type="text"
+                    className=""
+                    value={payment.atm_number}
+                    onChange={(e) =>
+                      setPayment({
+                        ...payment,
+                        atm_number: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="field col text-blue-600">
+                  <label htmlFor="quantity" className="">
+                    ວັນທີຊຳລະ
+                  </label>
+
+                  <Calendar
+                    dateFormat="yy-mm-dd"
+                    onChange={(e) =>
+                      setPayment({ ...payment, payment_date: e.target.value })
+                    }
+                    showIcon
                   />
                 </div>
               </div>

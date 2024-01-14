@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { Toolbar } from "primereact/toolbar";
 import axiosInterceptorInstance from "../../../demo/components/axios";
 
-const Statement = () => {
+const PaidStatement = () => {
   const [payments, setPayments] = useState([]);
   const [paymentDialog, setPaymentDialog] = useState(false);
   const [payment, setPayment] = useState();
@@ -80,7 +80,7 @@ const Statement = () => {
     </>
     );
     
-    const routPagetoInvoiceData = () => {
+    const routPagetopaymentHistory = () => {
         router.push("/pages/paymentHistory");
       };
 
@@ -102,10 +102,10 @@ const Statement = () => {
     return (
       <React.Fragment>
         <Button
-          label="ເບິ່ງຂໍ້ມູນການຊຳລະ"
+          label="ປະຫວັດການຊຳລະ"
           icon="pi pi-eye"
           className="mr-2 p-button-secondary"
-          onClick={routPagetoInvoiceData}
+          onClick={routPagetopaymentHistory}
         />
         <Button label="ພິມລາຍງານ" icon="pi pi-print" className="p-button-help" />
       </React.Fragment>
@@ -133,7 +133,7 @@ const Statement = () => {
               </div>
               <div className="flex align-items-center gap-3">
                 <span className="flex align-items-center gap-2">
-                  <span className="font-semibold">{payment.bankName}</span>
+                ເລກທີ ສັນຍາ: <span className="font-semibold">{payment.loan_no}</span>
                 </span>
                 <Tag
                   value={payment.loan_type}
@@ -168,7 +168,7 @@ const Statement = () => {
         <div className="card">
           <Toast ref={toast} />
           <Toolbar
-            className="mb-4"
+            className="mb-4 bg-red-50"
             left={leftToolbarTemplate}
             right={rightToolbarTemplate}
           ></Toolbar>
@@ -246,4 +246,4 @@ const Statement = () => {
   );
 };
 
-export default Statement;
+export default PaidStatement;

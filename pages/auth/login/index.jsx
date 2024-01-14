@@ -68,9 +68,9 @@ const LoginPage = () => {
 
                         <div>
                         <label htmlFor="email1" className="block text-900 text-xl font-medium mb-2">
-                                ລະຫັດພະນັກງານ
+                                ຊື່ຜູ້ໃຊ້
                             </label>
-                            <InputText inputid="email1" type="text" onChange={(e) => setUsername(e.target.value)} placeholder="ລະຫັດພະນັກງານ" className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
+                            <InputText inputid="email1" type="text" onChange={(e) => setUsername(e.target.value)} placeholder="ພິມຊື່ຜູ້ໃຊ້" className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
 
                             <label htmlFor="password1" className="block text-900 font-medium text-xl mb-2">
                                 ລະຫັດຜ່ານ

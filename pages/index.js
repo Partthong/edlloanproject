@@ -9,6 +9,9 @@ import { useRouter } from "next/router";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import axiosInterceptorInstance from "../demo/components/axios";
+import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
+
 
 const Dashboard = () => {
   const [products, setProducts] = useState(null);
@@ -16,6 +19,9 @@ const Dashboard = () => {
   const { layoutConfig } = useContext(LayoutContext);
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
+
+  const [chartbarData, setChartbarData] = useState({});
+  const [chartbarOptions, setChartbarOptions] = useState({});
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
   const [loanAmountCurrency, setLoanAmountCurrency] = useState([]);
@@ -24,6 +30,7 @@ const Dashboard = () => {
   const [showTotalLoan, setShowTotalLoan] = useState(null);
   const [showTotalPaymentLoan, setShowTotalPaymentLoan] = useState(null);
   const [showTotalBalanceLoan, setShowTotalBalanceLoan] = useState(null);
+  const [city, setCity] = useState(null);
 
   useEffect(() => {
     checkAuthorization();
@@ -123,108 +130,74 @@ const Dashboard = () => {
     }
   };
 
-  const lineData = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Augt",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
-    datasets: [
-      {
-        label: "ຍອດຊຳລະໜີ້",
-        data: [65, 59, 80, 81, 56, 55, 40, 80, 81, 56, 55, 40],
-        fill: false,
-        backgroundColor: "#d90404",
-        borderColor: "#d90404",
-        tension: 0.4,
-      },
-      {
-        label: "ໜີ້ຈະຕ້ອງຈ່າຍ",
-        data: [28, 48, 40, 19, 86, 27, 90, 80, 81, 56, 55, 40],
-        fill: false,
-        backgroundColor: "#4979F8",
-        borderColor: "#4979F8",
-        tension: 0.4,
-      },
-    ],
-  };
 
-  const applyLightTheme = () => {
-    const lineOptions = {
-      plugins: {
-        legend: {
-          labels: {
-            color: "#495057",
-          },
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: "#495057",
-          },
-          grid: {
-            color: "#ebedef",
-          },
-        },
-        y: {
-          ticks: {
-            color: "#495057",
-          },
-          grid: {
-            color: "#ebedef",
-          },
-        },
-      },
-    };
 
-    setLineOptions(lineOptions);
-  };
+  // const applyLightTheme = () => {
+  //   const lineOptions = {
+  //     plugins: {
+  //       legend: {
+  //         labels: {
+  //           color: "#495057",
+  //         },
+  //       },
+  //     },
+  //     scales: {
+  //       x: {
+  //         ticks: {
+  //           color: "#495057",
+  //         },
+  //         grid: {
+  //           color: "#ebedef",
+  //         },
+  //       },
+  //       y: {
+  //         ticks: {
+  //           color: "#495057",
+  //         },
+  //         grid: {
+  //           color: "#ebedef",
+  //         },
+  //       },
+  //     },
+  //   };
 
-  const applyDarkTheme = () => {
-    const lineOptions = {
-      plugins: {
-        legend: {
-          labels: {
-            color: "#ebedef",
-          },
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: "#ebedef",
-          },
-          grid: {
-            color: "rgba(160, 167, 181, .3)",
-          },
-        },
-        y: {
-          ticks: {
-            color: "#ebedef",
-          },
-          grid: {
-            color: "rgba(160, 167, 181, .3)",
-          },
-        },
-      },
-    };
+  //   setLineOptions(lineOptions);
+  // };
 
-    setLineOptions(lineOptions);
-  };
+  // const applyDarkTheme = () => {
+  //   const lineOptions = {
+  //     plugins: {
+  //       legend: {
+  //         labels: {
+  //           color: "#ebedef",
+  //         },
+  //       },
+  //     },
+  //     scales: {
+  //       x: {
+  //         ticks: {
+  //           color: "#ebedef",
+  //         },
+  //         grid: {
+  //           color: "rgba(160, 167, 181, .3)",
+  //         },
+  //       },
+  //       y: {
+  //         ticks: {
+  //           color: "#ebedef",
+  //         },
+  //         grid: {
+  //           color: "rgba(160, 167, 181, .3)",
+  //         },
+  //       },
+  //     },
+  //   };
 
-  useEffect(() => {
-    ProductService.getProductsSmall().then((data) => setProducts(data));
-  }, []);
+  //   setLineOptions(lineOptions);
+  // };
+
+
+
 
   useEffect(() => {
     const documentStyle = getComputedStyle(document.documentElement);
@@ -232,16 +205,16 @@ const Dashboard = () => {
       labels: ["ໜີ້ກູ້ຢືມໂດຍກົງ", "ໜີ້ກູ້ຢືມຕໍ່", "ໜີ້ກູ້ຢືມແກ້ສະພາບຄ່ອງ"],
       datasets: [
         {
-          data: [300, 300, 300],
+          data: [500000000,100000000, 500000000],
           backgroundColor: [
-            documentStyle.getPropertyValue("--red-600"),
-            documentStyle.getPropertyValue("--orange-600"),
-            documentStyle.getPropertyValue("--yellow-600"),
+            documentStyle.getPropertyValue("--blue-400"),
+            documentStyle.getPropertyValue("--green-400"),
+            documentStyle.getPropertyValue("--orange-400"),
           ],
           hoverBackgroundColor: [
-            documentStyle.getPropertyValue("--red-400"),
-            documentStyle.getPropertyValue("--orange-400"),
-            documentStyle.getPropertyValue("--yellow-400"),
+            documentStyle.getPropertyValue("--blue-300"),
+            documentStyle.getPropertyValue("--green-300"),
+            documentStyle.getPropertyValue("--orange-300"),
           ],
         },
       ],
@@ -254,13 +227,54 @@ const Dashboard = () => {
     setChartOptions(options);
   }, []);
 
+
   useEffect(() => {
-    if (layoutConfig.colorScheme === "light") {
-      applyLightTheme();
-    } else {
-      applyDarkTheme();
-    }
-  }, [layoutConfig.colorScheme]);
+    const data = {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [
+            {
+                label: 'Sales',
+                data: [540, 325, 702, 620],
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                  ],
+                  borderColor: [
+                    'rgb(255, 159, 64)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)'
+                  ],
+                  borderWidth: 1
+            }
+        ]
+    };
+    const options = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    };
+
+    setChartbarData(data);
+    setChartbarOptions(options);
+}, []);
+
+  // useEffect(() => {
+  //   if (layoutConfig.colorScheme === "light") {
+  //     applyLightTheme();
+  //   } else {
+  //     applyDarkTheme();
+  //   }
+  // }, [layoutConfig.colorScheme]);
+
+
+  useEffect(() => {
+    ProductService.getProductsSmall().then((data) => setProducts(data));
+  }, []);
 
   const formatCurrency = (value) => {
     return value.toLocaleString("en-US", {});
@@ -301,8 +315,6 @@ const Dashboard = () => {
   const amountkipBalancetBody = (rowData) => {
     return formatCurrency(rowData.amount_kip);
   };
-
-
 
   const totalLoan = () => {
     let total = 0;
@@ -373,26 +385,34 @@ const Dashboard = () => {
     </ColumnGroup>
   );
 
+
+
   const toast = useRef(null);
 
   return (
     <div className="grid">
-      <Toast ref={toast} />
-      {/* <div className="col-12 lg:col-6 xl:col-3">
+
+      <div className="col-12 lg:col-12 xl:col-12">
+            <div className="card flex justify-content-center align-items-center text-blue-500 text-lg">       
        
-            <div className="card mb-0">
-                <div className="flex justify-content-between mb-3">
-                    <div>
-                        <span className="block text-500 font-medium mb-3">ໜີ້ກູ້ຢືມໂດຍກົງທັງໝົດ</span>
-                        <div className="text-900 font-medium text-xl">2.450.000.000.000</div>
-                    </div>
-                    <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                      Kip 
-                    </div>
-                </div>
+          <label htmlFor="name" className="mr-3" >ປ່ຽນສະກຸນເງິນ</label>
+
+          {/* <Dropdown  value={city} options={citySelectItems} onChange={(e) => setCity(e.value)} placeholder=""/> */}
+         
+          <Dropdown
+                    value={city}
+                    onChange={(e) => setCity(e.value)} 
+                    options={loanAmountCurrency}
+                    optionValue="currency"
+                    optionLabel="currency"
+                   
+                  />
+                
             </div>
-        </div> */}
+        </div>
+          
       <div className="col-12 lg:col-6 xl:col-4">
+                  
         <div className="card mb-0">
           <div className="flex justify-content-between mb-3">
             <div>
@@ -455,21 +475,30 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="col-12 xl:col-6">
-        <div className="card">
-          <h5>ສະແດງຍອດໜີ້ໃນແຕ່ລະເດືອນ</h5>
-          <Chart type="line" data={lineData} options={lineOptions} />
-        </div>
-      </div>
+    
 
       <div className="col-12 xl:col-6">
-        <div className="card flex justify-content-center">
-          <Chart
+    
+        <div className="card ">
+        <h5>ສະຖິຕິປະເພດໜີ້ກູ້ຢືມ</h5>
+        <div className="flex justify-content-center"> 
+        <Chart
             type="doughnut"
             data={chartData}
             options={chartOptions}
             className="w-full md:w-20rem"
           />
+        </div>
+         
+        </div>
+      </div>
+
+      <div className="col-12 xl:col-6">
+        <div className="card">
+        <h5>ສະຖິຕິ ການຊຳລະໜີ້ ແລະ ກູ້ຢືມໜີ້ ແຕ່ປີ 2013 - ປະຈຸບັນ</h5>
+       
+             <Chart type="bar" data={chartbarData} options={chartbarOptions} />
+       
         </div>
       </div>
 

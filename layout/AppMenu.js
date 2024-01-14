@@ -45,7 +45,7 @@ const AppMenu = () => {
 
                 { label: 'ເພີ່ມ Invoice ຖອນເງິນກູ້', icon: 'pi pi-fw pi-file', to: '/pages/invoicewithdraw' },
                 { label: 'ຖອນເງິນກູ້', icon: 'pi pi-fw pi-dollar', to: '/pages/withdraw' },
-                { label: 'ການເຄື່ອນໄຫວຖອນເງິນກູ້', icon: 'pi pi-fw pi-history', to: '' },
+                { label: 'ການເຄື່ອນໄຫວຖອນເງິນກູ້', icon: 'pi pi-fw pi-history', to: '/pages/withdrawstatement' },
 
 
             ]
@@ -55,7 +55,7 @@ const AppMenu = () => {
             items: [
                 { label: 'ເພີ່ມ Invoice ຊຳລະໜີ້', icon: 'pi pi-fw pi-file', to: '/pages/invoice' },
                 { label: 'ຊຳລະໜີ້', icon: 'pi pi-fw pi-dollar', to: '/pages/payment' },
-                { label: 'ການເຄື່ອນໄຫວຊຳລະໜີ້', icon: 'pi pi-fw pi-history', to: '/pages/statement' },
+                { label: 'ການເຄື່ອນໄຫວຊຳລະໜີ້', icon: 'pi pi-fw pi-history', to: '/pages/paidstatement' },
                 // { label: 'ຮ່າງເອກະສານຂໍຈ່າຍ', icon: 'pi pi-fw pi-pencil', to: '' },
                 // { label: 'ອະນຸມັດ', icon: 'pi pi-fw pi-check-circle', to: '/uikit/list' },
                 // { label: 'ຕິດຕາມເອກະສານ', icon: 'pi pi-fw pi-sliders-h', to: '/uikit/menu', preventExact: true }
@@ -72,7 +72,7 @@ const AppMenu = () => {
                         {
                             label: 'ເພີ່ມຜູ້ໃຊ້',
                             icon: 'pi pi-fw pi-user-plus',
-                            to: '/auth/login'
+                            to: '/pages/users'
                         }
                         // {
                         //     label: 'ລົງທະບຽນ',
@@ -91,13 +91,13 @@ const AppMenu = () => {
                 },
                 {
                     label: 'ຂໍ້ມູນປະເພດກູ້ຢືມ',
-                    icon: 'pi pi-fw pi-list',
+                    icon: 'pi pi-briefcase',
                     to: '/pages/loantype'
                 },
 
                 {
                     label: 'ອັດຕາແລກປ່ຽນ',
-                    icon: 'pi pi-fw pi-circle-off',
+                    icon: 'pi pi-money-bill',
                     to: '/pages/currency'
                 }
             ]
